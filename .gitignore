@@ -1,1 +1,13 @@
-node_modules
+# OS and IDE stuff
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+
+# Build artifacts
+node_modules/
+vendor/
+
+# WordPress cache/temp if present
+*.zip
