@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'Panton Narrow Light Caps';
+    src: url('hinted-PantonNarrowDemo-Light.woff2') format('woff2'),
+        url('hinted-PantonNarrowDemo-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Panton Narrow Black Caps';
+    src: url('hinted-PantonNarrowDemo-Black.woff2') format('woff2'),
+        url('hinted-PantonNarrowDemo-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+

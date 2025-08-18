@@ -1,0 +1,23 @@
+/*
+Theme Name: TINQIN
+Theme URI: https://tinqin.com/
+Author: Gergin Borisov
+Author URI: https://tinqin.com/
+Description: TINQIN's official Wordpress web site theme.
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: tinqin
+Tags: private
+*/
+
+
+h1,h2,h3,h4,h5,h6{
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 900;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+
+}
