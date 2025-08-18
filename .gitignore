@@ -1,13 +1,25 @@
 # OS and IDE stuff
+
+# Logs and dumps
+error_log
+*.log
+*.sql
+*.sqlite
+
 .DS_Store
 Thumbs.db
 *.log
 .idea/
 .vscode/
 
-# Build artifacts
+# Build and deps
 node_modules/
 vendor/
+dist/
+build/
+
+# Map files
+*.map
 
 # WordPress cache/temp if present
 *.zip
