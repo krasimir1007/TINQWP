@@ -212,7 +212,7 @@ get_header();
 
   // Knobs
   const TYPE_MS = 8;    // lower = faster
-  const LINE_GAP = 120;  // pause between lines
+  const LINE_GAP = 520;  // pause between lines
 
   // ~20 lines, staging then prod
   const LINES = [
