@@ -34,6 +34,7 @@ get_header();
   font-family:Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial;
   font-weight:800; letter-spacing:-.02em; line-height:1.06; margin:0 0 12px;
   font-size:clamp(34px,4vw,50px); max-width:14ch; color:var(--h1-gray);
+
 }
 .home-hero .hero-copy h1 mark{
   background:transparent; color:#CE3531; padding:0; margin:0; border:0; border-radius:0; line-height:inherit; box-shadow:none; text-decoration:none;
@@ -134,6 +135,24 @@ get_header();
 .home-hero .promo-banner .promo-icon svg{width:18px; height:18px; fill:currentColor;}
 .home-hero .promo-banner:hover{filter:brightness(.98);}
 @media (max-width:680px){ .home-hero .promo-banner{ width:100%; } }
+
+/* Mobile: center the hero headings themselves */
+@media (max-width: 680px){
+  .home-hero .hero-copy h1,
+  .home-hero .hero-copy h1.hero-h1,
+  .home-hero .hero-copy h2{
+    margin: 0 auto 12px;   /* centers the narrow block */
+    text-align: center;    /* center the lines inside */
+  }
+
+  /* Optional: slightly wider H1 so it breaks less */
+  .home-hero .hero-copy h1,
+  .home-hero .hero-copy h1.hero-h1{
+    max-width: 18ch;       /* was 14ch */
+  }
+}
+
+
 </style>
 
 

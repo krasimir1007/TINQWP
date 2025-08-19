@@ -178,19 +178,8 @@ a:active{
 	margin-right: 5px;
 	font-size: 12px;
 }
-.nav.lang-nav,
-.menu{
-	display: block;
-}
-.nav.lang-nav .lang-item{
-	list-style: none;
-	display: inline-block;
-	margin-left: 5px;
-	filter: drop-shadow(0 -1px 3px #C2C2C2);
-}
-.nav.lang-nav .lang-item.current-lang{
-	filter: drop-shadow(0 -1px 3px #A2A2A2);
-}
+
+
 .menu ul li{
 	list-style: none;
 	display: inline-block;
@@ -207,46 +196,53 @@ a:active{
 .menu ul li a:hover{
 	color: #5f110c;
 }
+
+/* Language pills — minimal + polished */
+.nav.lang-nav .lang-item{display:inline-block;vertical-align:middle;}
+.nav.lang-nav .lang-item + .lang-item{margin-left:10px;}
+
 .nav.lang-nav li.lang-item a{
-	position: relative;
-	padding-left: 20px;
-	font-size: 0px;
-	text-decoration: none;
-	color: #d43930;
-	position: relative;
-    top: -15px;
-	
+  position:relative;
+  padding-left:40px;   /* room for the pill */
+  font-size:0;         /* hide link text (SVG shows letters) */
+  text-decoration:none;
+  color:#d43930;
+  top:-15px;           /* keep your existing alignment */
 }
-.nav.lang-nav li.lang-item a:hover {
-	color: #6f1d1b
+
+/* the pill */
+.nav.lang-nav li.lang-item a::before{
+  content:'';
+  position:absolute; left:0; top:0;
+  width:36px; height:26px;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  background:#fff center/120% no-repeat;
+  box-sizing:border-box;
+  transition:background-color .15s ease, border-color .15s ease, transform .1s ease;
 }
-.nav.lang-nav li.lang-item.lang-item-en a:before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 17px;
-	width: 17px;
-	background: url(../images/flag-en.svg) no-repeat center center;
+
+/* images */
+.nav.lang-nav li.lang-item.lang-item-fr a::before { background-image:url(../images/flag-fr.svg); }
+.nav.lang-nav li.lang-item.lang-item-en a::before { background-image:url(../images/flag-en.svg); }
+.nav.lang-nav li.lang-item.lang-item-bg a::before { background-image:url(../images/flag-bg.svg); }
+
+/* hover / focus */
+.nav.lang-nav li.lang-item a:hover::before,
+.nav.lang-nav li.lang-item a:focus-visible::before{
+  background-color:#eef2f7;
+  border-color:#6b89a6;
 }
-.nav.lang-nav li.lang-item.lang-item-fr a:before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 17px;
-	width: 17px;
-	background: url(../images/flag-fr.svg) no-repeat center center;
+
+/* press feedback */
+.nav.lang-nav li.lang-item a:active::before{ transform:translateY(1px); }
+
+/* current language (selected) */
+.nav.lang-nav li.current-lang > a::before{
+  background-color:#f3f6fb;
+  border-color:#6b89a6;
 }
-.nav.lang-nav li.lang-item.lang-item-bg a:before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 17px;
-	width: 17px;
-	background: url(../images/flag-bg.svg) no-repeat center center;
-}
+
 
 /* Primary menu */
 .header-breaker{
@@ -317,50 +313,6 @@ a:active{
 	background-color: #6f1d1b;
 }
 
-#MobileMenuContainer{
-	position: relative;
-	margin-top: -20px;
-	margin-bottom: 40px;
-	position: fixed;
-	top: 75px;
-	left: 0;
-	right: 0;
-	z-index: 6000;
-}
-#MobileMenuContainer>div{	
-	padding: 20px 30px;
-	background: #d43930;
-}
-
-#MobileMenuContainer.show:before{
-	position: absolute;
-	width: 30px;
-	height: 30px;
-	background-color: #d43930;
-	transform: rotate(45deg);
-	top: -8px;
-	right: 20px;
-	content: '';
-}
-#MobileMenuContainer ul{
-	padding: 0;
-	margin: 0;
-}
-#MobileMenuContainer ul li{
-	list-style: none;
-	width: 100%;
-	padding: 10px 0;
-}
-#MobileMenuContainer ul li a{
-	text-decoration: none;
-	text-transform: uppercase;
-	font-weight: 700;
-	transition: 0.3s all ease-in-out;
-	color: #fff;
-}
-#MobileMenuContainer ul li a:hover{
-	color: #ffbfbb;
-}
 
 /* Benefits */
 .benefits-list{
@@ -2558,4 +2510,75 @@ img.size-full {
   max-width: 100%;!important
   height: auto !important;
   width: auto !important;
+}
+
+/* ===== Mobile hamburger menu – pin directly under fixed header ===== */
+#MobileMenu {
+  position: fixed;       /* take it out of page flow so it doesn't open mid-page */
+  left: 0;
+  right: 0;
+  top: 64px;             /* header height; tweak to 56–72px if needed */
+  z-index: 7000;         /* above page content, below admin bar if any */
+  width: 100%;
+  margin: 0 !important;
+  padding: 20px 30px;
+  background: #d43930;
+}
+
+/* little corner pointer */
+#MobileMenu.show:before,
+#MobileMenu:before {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: #d43930;
+  transform: rotate(45deg);
+  top: -8px;
+  right: 20px;
+  content: '';
+}
+
+/* Menu list styling (moved from *Container* rules to #MobileMenu) */
+#MobileMenu ul {
+  padding: 0;
+  margin: 0;
+}
+#MobileMenu ul li {
+  list-style: none;
+  width: 100%;
+  padding: 10px 0;
+}
+#MobileMenu ul li a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: 0.3s all ease-in-out;
+  color: #fff;
+}
+#MobileMenu ul li a:hover {
+  color: #ffbfbb;
+}
+
+/* Optional: keep it out of the way on desktop if markup persists */
+@media (min-width: 992px) {
+  #MobileMenu { position: static; padding: 0; background: transparent; }
+  #MobileMenu:before { display: none; }
+}
+
+/* Mobile: language pills (centered, one line, 20px below header) */
+@media (max-width: 992px){
+  .d-block.d-lg-none .top-menu-item{
+    margin-top: 42px; /* push block below the fixed header */
+	margin-bottom: -1px!important;
+  }
+  .d-block.d-lg-none .top-menu-item .nav.lang-nav{
+    display: inline-flex;   /* keep pills in one row */
+    gap: 10px;              /* spacing between pills */
+    width: fit-content;     /* shrink to content */
+    margin: 0 auto;         /* center */
+  }
+  .d-block.d-lg-none .nav.lang-nav li.lang-item a{
+    top: 0 !important;      /* remove desktop vertical nudge */
+    padding-left: 40px;     /* room for the 32×24 pill */
+  }
 }
