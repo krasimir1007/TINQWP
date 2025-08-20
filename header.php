@@ -96,6 +96,17 @@
            'depth'           => 2
          ));
         ?>
+		<!-- Mobile languages -->
+			<ul class="mobile-lang-nav">
+			  <?php
+				// text-only, short slugs (FR / EN / BG); current is highlighted via .current-lang
+				pll_the_languages([
+				  'show_flags'               => 0,
+				  'display_names_as'         => 'names',
+				  'hide_if_no_translation'   => 1,
+				]);
+			  ?>
+			</ul>
       </div>
     </div>
 
@@ -131,7 +142,7 @@
            'walker'          => new bs4navwalker()
          ));
         ?>
-		            <div class="top-menu ml-5">
+		            <div class="top-menu">
 <!-- 						
             <div class="top-menu-item">
               <?php
@@ -151,3 +162,29 @@
     </nav>
 		  </div>
   </div>
+  <script>
+  (function () {
+    var trigger = document.getElementById('MobileMenuTrigger');
+    var wrap    = document.getElementById('MobileMenuContainer');
+
+    if (!trigger || !wrap) return;
+
+    // Sync "hamburger--elastic" animation and lock body scroll while open
+    function toggleBodyLock(on){ document.documentElement.style.overflow = on ? 'hidden' : ''; }
+
+    trigger.addEventListener('click', function () {
+      // Bootstrap handles .show; we just flip the animated hamburger class
+      trigger.classList.toggle('is-active');
+      var open = wrap.classList.contains('show');
+      toggleBodyLock(!open);
+    });
+
+    // Also listen for Bootstrap collapse events if present
+    document.addEventListener('shown.bs.collapse', function(e){
+      if (e.target === wrap){ toggleBodyLock(true); trigger.classList.add('is-active'); }
+    });
+    document.addEventListener('hidden.bs.collapse', function(e){
+      if (e.target === wrap){ toggleBodyLock(false); trigger.classList.remove('is-active'); }
+    });
+  })();
+</script>
