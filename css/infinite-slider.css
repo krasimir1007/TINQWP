@@ -83,7 +83,7 @@
     float: right;
 }
 .slick-slide img {
-  height: 82px;   /* match intrinsic logo height */
+  height: 82px!important;   /* match intrinsic logo height */
   width: auto;    /* keep proportions */
   margin: 0 auto; /* center align */
   object-fit: contain;
