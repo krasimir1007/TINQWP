@@ -1,16 +1,19 @@
 /* ============================== TINQIN THEME — CLEAN MOBILE-FIRST CSS ============================== */
 /* ---- Tokens ---- */
-:root{--tq-red:#CE3531;--tq-ink:#121417;--tq-gray:#5b6570;--tq-gray-100:#f3f4f6;--tq-blue:#1a73e8;--tq-white:#fff;}
+:root{--tq-red:#CE3531;--tq-ink:#121417;--tq-gray:#5b6570;--tq-gray-100:#f3f4f6;--tq-blue:#1a73e8;--tq-white:#fff;
+  --tq-font: 'Montserrat',sans-serif,'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial;
+}
+
 /* ---- Base / Typography ---- */
-*{box-sizing:border-box}html,body{height:100%}body{margin:0;padding:0;font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,sans-serif;font-weight:400;color:#2b2e31;background:#fff}
-h1,h2,h3,h4,h5,h6,ul,li{font-family:'Montserrat',sans-serif!important;font-weight:500;line-height:1.5;margin:0 0 .6rem}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;padding:0;font-family:var(--tq-font);font-weight:400;color:#2b2e31;background:#fff}
+h1,h2,h3,h4,h5,h6,ul,li{font-family:var(--tq-font)!important;font-weight:500;line-height:1.5;margin:0 0 .6rem}
 h1{font-size:30px;font-weight:800}h2{font-size:22px}h3{font-size:25px}h4{font-size:16px}h5{font-size:15px}h6{font-size:14px}
 h1.fat-title,h2.fat-title,h3.fat-title,h4.fat-title,h5.fat-title,h6.fat-title{font-weight:800!important}
 h4.font-weight-700{font-weight:700!important;margin-bottom:0}
 
-p { font-family:'Montserrat',sans-serif!important; font-weight:500; font-size:15px; margin:0 0 1rem; } 
-span { font-family:'Montserrat',sans-serif!important; font-weight:500; font-size:15px; margin:0; } 
-strong { font-family:'Montserrat',sans-serif!important; }
+p { font-family:var(--tq-font)!important; font-weight:500; font-size:15px; margin:0 0 1rem; } 
+span { font-family:var(--tq-font)!important; font-weight:500; font-size:15px; margin:0; } 
+strong { font-family:var(--tq-font)!important; }
 
 .section-subtitle{font-size:18px}
 h2.section-title{font-weight:800!important;position:relative;padding-left:35px}
@@ -20,7 +23,7 @@ h2.section-title.sidebar-title{color:#444;padding-left:25px;font-size:20px;line-
 h2.section-title.sidebar-title::before{height:15px;width:15px;top:2px;left:0}
 .text-right h2.section-title{padding-left:0;padding-right:35px}.text-right h2.section-title::before{left:auto;right:0}
 /* ---- Links ---- */
-a{color:#d43930;transition:color .25s ease;text-decoration:none;font-family:'Montserrat',sans-serif!important}
+a{color:#d43930;transition:color .25s ease;text-decoration:none;font-family:var(--tq-font)!important}
 a:hover,a:active{color:#5f110c;text-decoration:none}
 /* ---- Header / Logo (mobile first) ---- */
 .logo-wrapper a{height:100%;width:100%}.site-logo{max-height:50px}
@@ -163,7 +166,7 @@ small.staff-name{font-weight:700}small.staff-position{color:#909090}
 .custom-select:focus,.input-group>.custom-file .custom-file-input:focus{box-shadow:0 0 0 .2rem rgb(21 134 147 / .25)!important;border-color:#158693!important}
 .input-group>.custom-select:not(:first-child),.input-group>.form-control:not(:first-child),.input-group>.custom-file:not(:first-child) .custom-file-label{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem}
 .custom-file-input:focus~.custom-file-label{box-shadow:0 0 0 .2rem rgb(21 134 147 / 25%);border-color:#158693}
-option{font-family:'Montserrat',sans-serif!important;font-weight:500}
+option{font-family:var(--tq-font)!important;font-weight:500}
 /* ---- Misc visuals ---- */
 img.size-full{max-width:100%!important;height:auto!important;width:auto!important} /* fixed stray !important placement */
 .error404 .no-cont-subtitle{margin-bottom:16px;line-height:1.3}
@@ -327,3 +330,35 @@ img.size-full{max-width:100%!important;height:auto!important;width:auto!importan
 @media (min-width: 992px){
   .mobile-lang-nav{ display:none !important; }
 }
+
+/* --- Mobile Fix: keep hamburger from collapsing --- */
+#MobileMenuTrigger.hamburger{
+  display:inline-flex;             /* keep icon centered */
+  align-items:center;
+  justify-content:center;
+  width:48px;                      /* explicit tap target */
+  height:44px;
+  padding:0;                       /* the box sets the visual size */
+  flex:0 0 auto;                   /* DO NOT shrink inside flex rows */
+}
+
+#MobileMenuTrigger .hamburger-box{
+  width:32px;                      /* size of the three bars */
+  height:20px;
+}
+
+/* Minimal Hamburger (elastic) */
+.hamburger{padding:15px 0;cursor:pointer;transition:opacity .15s; }
+.hamburger-box{width:32px;height:24px;display:inline-block;position:relative}
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after{
+  width:32px;height:3px;background:#d43930;border-radius:2px;position:absolute;transition:transform .275s cubic-bezier(.68,-.55,.265,1.55), opacity .2s;
+}
+.hamburger-inner{top:50%;margin-top:-1.5px}
+.hamburger-inner::before{content:"";top:-9px}
+.hamburger-inner::after{content:"";top:9px}
+/* active (elastic) */
+.hamburger--elastic.is-active .hamburger-inner{transform:translate3px,0) rotate(135deg)}
+.hamburger--elastic.is-active .hamburger-inner::before{transform:translate(-6px,0) rotate(-270deg)}
+.hamburger--elastic.is-active .hamburger-inner::after{transform:translate(-6px,0) rotate(-270deg);top:0}

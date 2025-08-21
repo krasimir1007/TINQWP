@@ -199,41 +199,14 @@ get_header();
 	  </div>
 	</section>
   </div>
-<!-- Clients -->
-  <div class="container mt-lg-5 mb-lg-5 mt-3 mb-3" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>
-	<section class="home-hero-logos">
-	  <div class="container" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-		<section class="customer-logos slider">
-		  <?php
-		  $logos = get_posts(array(
-			'post_type'   => 'testimonials',
-			'numberposts' => -1
-		  ));
-		  if ($logos) {
-			foreach ($logos as $logo) {
-			  ?>
-			  <div class="slide">
-				<img src="<?php echo esc_url( get_the_post_thumbnail_url($logo->ID) ); ?>"
-					 alt="<?php echo esc_attr( $logo->post_title ); ?>">
-			  </div>
-			  <?php
-			}
-		  }
-		  ?>
-		</section>
-	  </div>
-	</section>
-  </div>
 
-
-  
   <!-- TINQIN Blog -->
           <?php
 
             $news = get_posts(
               array(
                 'post_type'     => 'post',
-                'numberposts'   => 6,
+                'numberposts'   => 3,
 				  'ignore_sticky_posts' => true,
 				  'category__in'        => [1, 8, 12],
 				  'suppress_filters'    => false // keeps Polylang filters working
@@ -331,7 +304,7 @@ get_header();
     <div class="row">
       <div class="col-lg-12 text-center" id='parent-team'>
 		<?php $rand = rand(1, 2); ?>
-        <img data-aos="fade-up" data-aos-duration='1000' data-aos-delay='350' src="<?php echo get_template_directory_uri(); ?>/images/meet-the-team-1.jpg" class="img-fluid" />
+        <!-- <img data-aos="fade-up" data-aos-duration='1000' data-aos-delay='350' src="<?php echo get_template_directory_uri(); ?>/images/meet-the-team-1.jpg" class="img-fluid" /> -->
 		<div class="col" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='350' data-aos-anchor='#parent-team' data-aos-once="true">
 			<a href="<?php echo get_permalink( pll_get_post( 35 ) ); ?>" class="mt-5 mb-5 btn btn-primary btn-lg"><?php pll_e( 'Запознай се с екипа' ) ?></a>
 		</div>
@@ -396,9 +369,6 @@ get_header();
     }
 
   ?> 
-
-
-  
 
 
 <?php get_footer(); ?>

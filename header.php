@@ -1,57 +1,54 @@
-<?php
-/**
- * The header for our theme
- *
- * This is the template that displays all of the <head> section and everything up until <div id="content">
- *
- * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
- *
- * @package WordPress
- * @subpackage TINQIN
- * @since 1.0.0
- */
-
-  $lang = pll_current_language();
-
-
-?><!doctype html>
+<!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
-  <script id="Cookiebot" data-culture="<?php echo $lang; ?>" src="https://consent.cookiebot.com/uc.js" data-cbid="bd1d06b7-f90d-4eaa-bdc9-190f7521cc94" data-blockingmode="auto" type="text/javascript"></script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta charset="<?php bloginfo('charset'); ?>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>
-	  <?php
-	  
-	  	if( is_home() ){
-			bloginfo('name'); ?> &raquo; <?php bloginfo('description');
-		}
-	    else{
-			wp_title( '', true, '|' ); ?> &raquo; <?php bloginfo('description');
-		}
-	  
-	  ?>
-  </title>
+  <!-- Cookie consent -->
+  <?php $lang = function_exists('pll_current_language') ? pll_current_language() : get_locale(); ?>
+  <script id="Cookiebot" data-culture="<?php echo esc_attr($lang); ?>"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="bd1d06b7-f90d-4eaa-bdc9-190f7521cc94"
+          data-blockingmode="auto" type="text/javascript"></script>
 
-  <!-- Bootstrap core CSS -->
-  <link href="<?php echo get_template_directory_uri(); ?>/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous" />
-  <link href="<?php echo get_template_directory_uri(); ?>/css/hamburgers.css" rel="stylesheet" />
-  <link href="<?php echo get_template_directory_uri(); ?>/css/infinite-slider.css" rel="stylesheet" />
-  <link href="<?php echo get_template_directory_uri(); ?>/css/tinqin.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css" rel="stylesheet" />
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
-  <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
-  <meta name="facebook-domain-verification" content="q5vwp1r1yp5ov5ut56s2b73o39pxc2" />
+  <!-- Canonical -->
+  <?php
+  if ( is_singular() ) {
+    printf('<link rel="canonical" href="%s" />'."\n", esc_url( get_permalink() ));
+  } elseif ( function_exists('pll_home_url') && is_front_page() ) {
+    printf('<link rel="canonical" href="%s" />'."\n", esc_url( pll_home_url() ));
+  } else {
+    printf('<link rel="canonical" href="%s" />'."\n", esc_url( home_url( add_query_arg( [], $wp->request ?? '' ) ) ));
+  }
+  ?>
 
-    <?php wp_head(); ?>
+  <!-- hreflang alternates (Polylang) -->
+  <?php if ( function_exists('pll_the_languages') ):
+    $langs = pll_the_languages(['raw'=>true]);
+    if ( $langs ) {
+      foreach ( $langs as $l ) {
+        $hreflang = substr($l['locale'], 0, 2); // en, fr, bg
+        printf('<link rel="alternate" href="%s" hreflang="%s" />'."\n",
+          esc_url($l['url']), esc_attr($hreflang));
+      }
+      printf('<link rel="alternate" href="%s" hreflang="x-default" />'."\n", esc_url(pll_home_url()));
+    }
+  endif; ?>
 
+  <title><?php
+    if ( is_home() || is_front_page() ) {
+      bloginfo('name'); echo ' » '; bloginfo('description');
+    } else {
+      wp_title(''); echo ' » '; bloginfo('description');
+    }
+  ?></title>
+
+  <?php
+
+  wp_head();
+  ?>
 </head>
+
 
 <body <?php body_class(); ?>>
 

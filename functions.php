@@ -1,43 +1,110 @@
 <?php
+/*************************************************
+ * ASSETS: global vs. page-scoped (clean header)
+ *************************************************/
+add_action( 'wp_default_scripts', function( $scripts ){
+    if( ! is_admin() && isset( $scripts->registered['jquery'] ) ){
+        $scripts->registered['jquery']->deps = array(); // Remove jquery-migrate as a dependency
+    }
+});
 
-// Remove block CSS to reduce size
-function enqueue_block_css_on_specific_ids() {
-  $allowed_pages = array(216, 3704, 338); // Replace with your actual page IDs
-  if (!is_page($allowed_pages)) {
+if( ! is_admin() ){
+    add_action( 'wp_enqueue_scripts', function(){
+        wp_deregister_script( 'jquery' );
+        wp_register_script( 'jquery', includes_url( '/js/jquery/jquery.min.js' ), false, NULL, true );
+        wp_enqueue_script( 'jquery' );
+    });
+}
+
+
+/**
+ * Optional: remove most Gutenberg block CSS except on selected pages
+ * (kept from your original – adjust IDs if needed)
+ */
+function tinqin_keep_block_css_on_pages() {
+  $allowed_pages = array(216, 3704, 338); // IDs where block styles are allowed
+  if ( ! is_page($allowed_pages) ) {
     wp_dequeue_style('wp-block-library');
     wp_dequeue_style('wp-block-library-theme');
     wp_dequeue_style('global-styles'); // optional
   }
 }
-add_action('wp_enqueue_scripts', 'enqueue_block_css_on_specific_ids', 100);
+add_action('wp_enqueue_scripts', 'tinqin_keep_block_css_on_pages', 100);
 
 
-// Remove Slider from all pages but Home
-function enqueue_slick_on_home_and_selected_pages() {
-  $slick_pages = array(336, 221, 2084, 1727, 620, 2082, 2102, 76, 1665); // Replace with your actual page IDs
+/**
+ * GLOBAL assets (minimal, everywhere)
+ * - Bootstrap CSS
+ * - Theme CSS (tinqin.css)
+ * - jQuery + Bootstrap JS bundle (footer)
+ */
+function tinqin_enqueue_global_assets() {
+  // CSS
+  wp_enqueue_style('bootstrap', get_template_directory_uri() . '/vendor/bootstrap/css/bootstrap.min.css', [], null);
+  wp_enqueue_style('tinqin',    get_template_directory_uri() . '/css/tinqin.css', ['bootstrap'], null);
 
-  if (is_front_page() || is_page($slick_pages)) {
-    wp_enqueue_style('slick-css', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.css');
-    wp_enqueue_script('slick', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js', array('jquery'), null, true);
-  }
-}
-add_action('wp_enqueue_scripts', 'enqueue_slick_on_home_and_selected_pages');
-
-// Bootstrap loading
-function load_bootstrap_js() {
-  // Load jQuery first
-  wp_enqueue_script('jquery');
-
-  // Load Bootstrap 4 JS bundle (includes Popper)
+  // JS (footer)
+  wp_enqueue_script('jquery'); // WP core handle
   wp_enqueue_script(
     'bootstrap-bundle',
     'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js',
-    array('jquery'), // dependencies
+    ['jquery'],
     '4.5.2',
-    true // load in footer
+    true
   );
 }
-add_action('wp_enqueue_scripts', 'load_bootstrap_js');
+add_action('wp_enqueue_scripts', 'tinqin_enqueue_global_assets', 20);
+
+
+/**
+ * HOMEPAGE / HERO assets only
+ */
+function tinqin_enqueue_home_assets() {
+  if ( is_front_page() || is_page_template('home-hero-test.php') ) {
+
+    // wp_enqueue_script('chart', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js', [], null, true);
+  }
+}
+add_action('wp_enqueue_scripts', 'tinqin_enqueue_home_assets', 30);
+
+
+/**
+ * Add `defer` to non-critical scripts we enqueue (safe list).
+ * Keeps jQuery/Bootstrap synchronous; defers slider/visual extras.
+ */
+function tinqin_defer_scripts( $tag, $handle ) {
+  $defer_handles = ['slick', 'aos', 'chart'];
+  if ( in_array($handle, $defer_handles, true) ) {
+    $tag = str_replace(' src', ' defer src', $tag);
+  }
+  return $tag;
+}
+add_filter('script_loader_tag', 'tinqin_defer_scripts', 10, 2);
+
+
+/**
+ * DNS hints for external CDNs (cheap perf win).
+ * Only if the above CDNs are used.
+ */
+function tinqin_dns_hints() {
+  echo '<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">' . "\n";
+  echo '<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">' . "\n";
+  echo '<link rel="dns-prefetch" href="https://stackpath.bootstrapcdn.com">' . "\n";
+}
+add_action('wp_head', 'tinqin_dns_hints', 1);
+
+add_action('wp_enqueue_scripts', function () {
+  // Fonts & core styles
+  wp_enqueue_style('tinqin-fonts', 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap', [], null);
+  wp_enqueue_style('bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css', [], '4.5.2');
+  wp_enqueue_style('hamburgers', get_template_directory_uri() . '/css/hamburgers.css', [], null);
+  wp_enqueue_style('tinqin', get_template_directory_uri() . '/css/tinqin.css', ['bootstrap','hamburgers'], filemtime(get_stylesheet_directory() . '/css/tinqin.css'));
+
+  // Core scripts
+  wp_enqueue_script('jquery');
+  wp_enqueue_script('bootstrap-bundle','https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js',['jquery'],'4.5.2',true);
+});
+
 
 // Function to align WP Menus to bootstrap 4
 require_once('bs4navwalker.php');
