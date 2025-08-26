@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: News
+ * Template Name: Career News
  * The main template file
  *
  * This is the most generic template file in a WordPress theme
@@ -14,6 +14,8 @@
  * @subpackage Twenty_Nineteen
  * @since 1.0.0
  */
+
+
 get_header();
 
 // Determine current page
@@ -22,6 +24,11 @@ if ( have_posts() ) {
 	while ( have_posts() ) {
 		the_post();
 		?>
+
+
+
+
+
 
 	<div class="container mt-5 pt-5 mb-5">
 		<div class="row">

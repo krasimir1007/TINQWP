@@ -109,6 +109,14 @@ get_header();
 .tq-out .cm{color:#9aa3ad;font-style:italic;}
 .tq-out .prompt{color:#00c853;font-weight:700;}
 
+/* terminal tokens */
+.ok  { color:#16a34a }                 /* green-ish success */
+.cmd { color:#d97706 }                 /* amber/orange for commands */
+.var { color:#a21caf }                 /* magenta for $VARS */
+.num { color:#f4c2d7; font-weight:600; } /* pinkish white */
+.cm  { color:#5b6570 }                 /* muted gray comments */
+
+
 /* Cursor */
 .tq-cursor{display:inline-block;width:14px;height:16px;background:#ae2f37;border-radius:2px;translate:0 2px;animation:tq-blink .9s steps(1) infinite;}
 @keyframes tq-blink{50%{opacity:.15;}}
@@ -373,36 +381,38 @@ get_header();
 
 <?php get_footer(); ?>
 
+
 <script>
 window.addEventListener('DOMContentLoaded', () => {
   const out = document.getElementById('tq-term-out');
   if (!out) return;
 
   // Speed knobs
-  const TYPE_MS = 10;   // per char (lower = faster)
-  const LINE_GAP = 380; // between lines
-  const START_DELAY = 3000; // 3s before typing starts
+  const TYPE_MS = 10;          // per char (lower = faster)
+  const LINE_GAP = 380;        // between lines
+  const EMPTY_DELAY = 1200;    // extra wait for blank lines
+  const START_DELAY = 3000;    // 3s before typing starts
 
   const LINES_DESKTOP = [
     "$ deploy.TINQIN_customApp.sh",
     "+ git pull --rebase && npm ci && npm test",
     "Already up to date.",
     "342 tests passed (3.2s)",
-    "",
     "+ trivy fs . --sev HIGH,CRIT -q --exit-code 1",
     "No vulnerabilities found",
-    "+ TAG=$(git rev-parse --short HEAD)",
-    "+ echo $TAG",
+    "",
+    "+ TAG=$(git rev-parse --short HEAD) && echo $TAG",
     "91ab23c",
     "+ docker build -t ghcr.io/tinqin/tqweb:91ab23c .",
     "Successfully built 91ab23c",
+    "",
     "+ docker push ghcr.io/tinqin/tqweb:91ab23c",
     "Pushed ghcr.io/tinqin/tqweb:91ab23c",
-    "+ helm upgrade --install tqweb charts/tqweb -n staging \\",
-    "    --set image.tag=91ab23c --atomic --wait --timeout 5m",
-    "Release \"tqweb\" has been upgraded.",
+    "+ helm upgrade --install tqweb charts/tqweb -n",
+    "  staging --set image.tag=91ab23c --wait",
+    "Release \"tqweb\" upgraded.",
     "+ kubectl rollout status deploy/tqweb -n staging",
-    "deployment \"tqweb\" successfully rolled out",
+    "Deployment \"tqweb\" successfully rolled out",
   ];
 
   const LINES_MOBILE = [
@@ -410,11 +420,9 @@ window.addEventListener('DOMContentLoaded', () => {
     "+ git pull --rebase && npm ci && npm test",
     "Already up to date.",
     "342 tests passed (3.2s)",
-    "",
     "+ trivy fs . --sev HIGH,CRIT -q --exit-code 1",
     "No vulnerabilities found",
-    "+ TAG=$(git rev-parse --short HEAD)",
-    "+ echo $TAG",
+    "+ TAG=$(git rev-parse --short HEAD) && echo $TAG",
     "91ab23c",
     "+ docker build -t ghcr.io/tinqin/tqweb:91ab23c .",
     "Successfully built 91ab23c",
@@ -424,7 +432,7 @@ window.addEventListener('DOMContentLoaded', () => {
     "  staging --set image.tag=91ab23c --wait",
     "Release \"tqweb\" upgraded.",
     "+ kubectl rollout status deploy/tqweb -n staging",
-    "deployment \"tqweb\" successfully rolled out",
+    "Deployment \"tqweb\" successfully rolled out",
   ];
 
   const LINES = window.matchMedia('(max-width:680px)').matches ? LINES_MOBILE : LINES_DESKTOP;
@@ -432,21 +440,41 @@ window.addEventListener('DOMContentLoaded', () => {
   // Red brand cursor
   const cursor = document.createElement('span');
   cursor.className = 'tq-cursor';
-  out.appendChild(cursor); // visible immediately (so box feels alive)
+  out.appendChild(cursor);
 
-  // Split line into styled parts
+  // Split into parts with classes:
+  // 1) ok words, 2) variables like $TAG, 3) shell comments, 4) the 'echo' command
   function splitParts(text) {
-    const esc = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const esc = text; // no HTML escaping in this snippet
     const parts = [];
     let lastIndex = 0;
-    const regex = /\b(Successfully|successfully|upgraded|Running|Pushed|found|Already up to date|342 tests passed)\b|(# .*)/g;
+
+const regex = new RegExp(
+  "\\b(Successfully|successfully|upgraded|Running|Pushed|found|Already up to date|tests passed|built)\\b" +
+  "|(\\becho\\b|\\b(?:git|npm|trivy|docker|helm|kubectl)\\b)" +
+  "|(\\$[A-Za-z_][A-Za-z0-9_]*|91ab23c)" + 
+  "|((?<![A-Za-z])\\d+(?:\\.\\d+)?(?:%|ms|[smhd])?(?![A-Za-z]))" +
+  "|(#[^\\n]*)",
+  "g"
+);
+
+
     let match;
     while ((match = regex.exec(esc))) {
       if (match.index > lastIndex) {
         parts.push({ text: esc.slice(lastIndex, match.index), cls: null });
       }
-      if (match[1]) parts.push({ text: match[1], cls: 'ok' });
-      else if (match[2]) parts.push({ text: match[2], cls: 'cm' });
+      if (match[1]) {
+        parts.push({ text: match[1], cls: 'ok' });
+      } else if (match[2]) {
+        parts.push({ text: match[2], cls: 'cmd' }); // echo → orange
+      } else if (match[3]) {
+        parts.push({ text: match[3], cls: 'var' }); // $VARS → magenta
+      } else if (match[4]) {
+	  parts.push({ text: match[4], cls: 'num' }); // numbers (incl. 3.2s, 5m, 100%)
+	} else if (match[5]) {
+	  parts.push({ text: match[5], cls: 'cm' });  // comments
+	}
       lastIndex = regex.lastIndex;
     }
     if (lastIndex < esc.length) {
@@ -460,14 +488,16 @@ window.addEventListener('DOMContentLoaded', () => {
       const row = document.createElement('div');
       out.insertBefore(row, cursor); // keep cursor always last
 
+      // Empty line: insert &nbsp; and wait longer
       if (original === "") {
         row.innerHTML = "&nbsp;";
-        setTimeout(resolve, LINE_GAP);
+        setTimeout(resolve, LINE_GAP + EMPTY_DELAY);
         return;
       }
 
       let text = original;
-      // handle prompt at start
+
+      // Handle prompt at start
       if (text.startsWith('$ ')) {
         const p = document.createElement('span');
         p.className = 'prompt';
@@ -501,22 +531,21 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-(async function run(){
-  await new Promise(r => setTimeout(r, START_DELAY));
-  for (const line of LINES) {
-    await typeLine(line);
-  }
+  (async function run(){
+    await new Promise(r => setTimeout(r, START_DELAY));
+    for (const line of LINES) {
+      await typeLine(line);
+    }
 
-  // realistic ending: prompt + cursor, same line
-  const row = document.createElement('div');
-  const p = document.createElement('span');
-  p.className = 'prompt';
-  p.textContent = '$ ';
-  row.appendChild(p);
-  row.appendChild(cursor); // keep cursor blinking here
-  out.appendChild(row);
-})();
-
+    // realistic ending: prompt + cursor, same line
+    const row = document.createElement('div');
+    const p = document.createElement('span');
+    p.className = 'prompt';
+    p.textContent = '$ ';
+    row.appendChild(p);
+    row.appendChild(cursor); // keep cursor blinking here
+    out.appendChild(row);
+  })();
 });
 </script>
 

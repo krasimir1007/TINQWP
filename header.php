@@ -6,10 +6,7 @@
 
   <!-- Cookie consent -->
   <?php $lang = function_exists('pll_current_language') ? pll_current_language() : get_locale(); ?>
-  <script id="Cookiebot" data-culture="<?php echo esc_attr($lang); ?>"
-          src="https://consent.cookiebot.com/uc.js"
-          data-cbid="bd1d06b7-f90d-4eaa-bdc9-190f7521cc94"
-          data-blockingmode="auto" type="text/javascript"></script>
+
 
   <!-- Canonical -->
   <?php
@@ -166,7 +163,7 @@
 
     if (!trigger || !wrap) return;
 
-    // Sync "hamburger--elastic" animation and lock body scroll while open
+    // Sync "hamburger--spin" animation and lock body scroll while open
     function toggleBodyLock(on){ document.documentElement.style.overflow = on ? 'hidden' : ''; }
 
     trigger.addEventListener('click', function () {

@@ -1,91 +1,95 @@
 <?php
 /*************************************************
- * ASSETS: global vs. page-scoped (clean header)
+ * ASSETS: single, clean enqueue with scoping
  *************************************************/
-add_action( 'wp_default_scripts', function( $scripts ){
-    if( ! is_admin() && isset( $scripts->registered['jquery'] ) ){
-        $scripts->registered['jquery']->deps = array(); // Remove jquery-migrate as a dependency
-    }
+
+/** 1) Remove jquery-migrate dep (front only) */
+add_action('wp_default_scripts', function ($scripts) {
+  if (!is_admin() && isset($scripts->registered['jquery'])) {
+    $scripts->registered['jquery']->deps = []; // no jquery-migrate
+  }
 });
 
-if( ! is_admin() ){
-    add_action( 'wp_enqueue_scripts', function(){
-        wp_deregister_script( 'jquery' );
-        wp_register_script( 'jquery', includes_url( '/js/jquery/jquery.min.js' ), false, NULL, true );
-        wp_enqueue_script( 'jquery' );
-    });
-}
+/** 2) Re-register core jQuery (minified) in footer (front only) */
+add_action('wp_enqueue_scripts', function () {
+  if (is_admin()) return;
+  wp_deregister_script('jquery');
+  // Core minified jQuery from WordPress includes (footer)
+  wp_register_script('jquery', includes_url('/js/jquery/jquery.min.js'), [], null, true);
+}, 5);
 
+/** 3) KILL Gutenberg/block CSS on the FRONT END (robust) */
+add_action('init', function () {
+  if (is_admin()) return;
 
-/**
- * Optional: remove most Gutenberg block CSS except on selected pages
- * (kept from your original – adjust IDs if needed)
- */
-function tinqin_keep_block_css_on_pages() {
-  $allowed_pages = array(216, 3704, 338); // IDs where block styles are allowed
-  if ( ! is_page($allowed_pages) ) {
-    wp_dequeue_style('wp-block-library');
-    wp_dequeue_style('wp-block-library-theme');
-    wp_dequeue_style('global-styles'); // optional
+  // Unhook core actions that enqueue block/global styles very early
+  if (has_action('wp_enqueue_scripts', 'wp_common_block_scripts_and_styles')) {
+    remove_action('wp_enqueue_scripts', 'wp_common_block_scripts_and_styles');
+  }
+  if (function_exists('wp_enqueue_global_styles') && has_action('wp_enqueue_scripts', 'wp_enqueue_global_styles')) {
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+  }
+  if (function_exists('wp_enqueue_classic_theme_styles') && has_action('wp_enqueue_scripts', 'wp_enqueue_classic_theme_styles')) {
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_classic_theme_styles');
+  }
+}, 0);
+
+// Belt & suspenders: dequeue/deregister late in the chain in case plugins re-add them
+add_action('wp_enqueue_scripts', function () {
+  if (is_admin()) return;
+
+  $handles = [
+    'wp-block-library',
+    'wp-block-library-theme',
+    'global-styles',           // theme.json front-end CSS
+    'classic-theme-styles',    // WP 6.x classic theme CSS
+    'gutenberg-block-library', // Gutenberg plugin (if active)
+    'wc-block-style',          // WooCommerce blocks
+    'wc-blocks-style',
+  ];
+
+  foreach ($handles as $h) {
+    wp_dequeue_style($h);
+    wp_deregister_style($h);
+  }
+}, 999);
+
+/** 4) Page‑scoped assets (example placeholder) */
+function tinqin_enqueue_about_assets() {
+  if (is_page([63, 336, 652])) {
+    // Example:
+    // wp_enqueue_style('slick', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css', [], '1.8.1');
+    // wp_enqueue_script('slick', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js', ['jquery'], '1.8.1', true);
   }
 }
-add_action('wp_enqueue_scripts', 'tinqin_keep_block_css_on_pages', 100);
+add_action('wp_enqueue_scripts', 'tinqin_enqueue_about_assets', 30);
 
+/** 5) Optionally REMOVE assets on pages that don’t need them */
+function tinqin_dequeue_home_extras() {
+  if (is_front_page()) {
+    // If you don’t need jQuery on the home page:
+    // wp_dequeue_script('jquery');
 
-/**
- * GLOBAL assets (minimal, everywhere)
- * - Bootstrap CSS
- * - Theme CSS (tinqin.css)
- * - jQuery + Bootstrap JS bundle (footer)
- */
-function tinqin_enqueue_global_assets() {
-  // CSS
-  wp_enqueue_style('bootstrap', get_template_directory_uri() . '/vendor/bootstrap/css/bootstrap.min.css', [], null);
-  wp_enqueue_style('tinqin',    get_template_directory_uri() . '/css/tinqin.css', ['bootstrap'], null);
+    // If no Bootstrap JS components used on home:
+    // wp_dequeue_script('bootstrap-bundle');
 
-  // JS (footer)
-  wp_enqueue_script('jquery'); // WP core handle
-  wp_enqueue_script(
-    'bootstrap-bundle',
-    'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js',
-    ['jquery'],
-    '4.5.2',
-    true
-  );
-}
-add_action('wp_enqueue_scripts', 'tinqin_enqueue_global_assets', 20);
-
-
-/**
- * HOMEPAGE / HERO assets only
- */
-function tinqin_enqueue_home_assets() {
-  if ( is_front_page() || is_page_template('home-hero-test.php') ) {
-
-    // wp_enqueue_script('chart', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js', [], null, true);
+    // If the hamburger CSS is only used on inner pages:
+    // wp_dequeue_style('hamburgers');
   }
 }
-add_action('wp_enqueue_scripts', 'tinqin_enqueue_home_assets', 30);
+add_action('wp_enqueue_scripts', 'tinqin_dequeue_home_extras', 99);
 
-
-/**
- * Add `defer` to non-critical scripts we enqueue (safe list).
- * Keeps jQuery/Bootstrap synchronous; defers slider/visual extras.
- */
-function tinqin_defer_scripts( $tag, $handle ) {
+/** 6) Add defer to specific non-critical scripts (expand list as needed) */
+function tinqin_defer_scripts($tag, $handle) {
   $defer_handles = ['slick', 'aos', 'chart'];
-  if ( in_array($handle, $defer_handles, true) ) {
+  if (in_array($handle, $defer_handles, true)) {
     $tag = str_replace(' src', ' defer src', $tag);
   }
   return $tag;
 }
 add_filter('script_loader_tag', 'tinqin_defer_scripts', 10, 2);
 
-
-/**
- * DNS hints for external CDNs (cheap perf win).
- * Only if the above CDNs are used.
- */
+/** 7) DNS prefetch (optional) */
 function tinqin_dns_hints() {
   echo '<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">' . "\n";
   echo '<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">' . "\n";
@@ -93,6 +97,7 @@ function tinqin_dns_hints() {
 }
 add_action('wp_head', 'tinqin_dns_hints', 1);
 
+/** 8) Global assets (Bootstrap CSS + local theme CSS; Bootstrap JS bundle in footer) */
 add_action('wp_enqueue_scripts', function () {
   // Fonts & core styles
   wp_enqueue_style('tinqin-fonts', 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap', [], null);
@@ -101,9 +106,21 @@ add_action('wp_enqueue_scripts', function () {
   wp_enqueue_style('tinqin', get_template_directory_uri() . '/css/tinqin.css', ['bootstrap','hamburgers'], filemtime(get_stylesheet_directory() . '/css/tinqin.css'));
 
   // Core scripts
-  wp_enqueue_script('jquery');
-  wp_enqueue_script('bootstrap-bundle','https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js',['jquery'],'4.5.2',true);
+  wp_enqueue_script('jquery'); // uses the footer-registered core jQuery above
+  wp_enqueue_script('bootstrap-bundle', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js', ['jquery'], '4.5.2', true);
 });
+
+/** 9) Remove WP block editor frontend CSS on home as an extra guard (safe duplicate) */
+add_action('wp_enqueue_scripts', function () {
+  if (is_front_page()) {
+    wp_dequeue_style('wp-block-library');
+    wp_dequeue_style('wp-block-library-theme');
+    wp_dequeue_style('global-styles');
+    wp_dequeue_style('classic-theme-styles');
+    wp_dequeue_style('wc-block-style');
+    wp_dequeue_style('wc-blocks-style');
+  }
+}, 100);
 
 
 // Function to align WP Menus to bootstrap 4
@@ -1421,4 +1438,18 @@ function tinqin_validate_forms( $post, $attachments = null ){
 	}
 	
 }
-?>
+
+
+
+/* ==== PERFORMANCE: Cookiebot + hints ==== */
+
+// Preconnect to Cookiebot hosts (faster TLS handshake)
+add_filter('wp_resource_hints', function($urls, $relation_type){
+  if ($relation_type !== 'preconnect' && $relation_type !== 'dns-prefetch') return $urls;
+  $hosts = [
+    'https://consent.cookiebot.com',
+    'https://consentcdn.cookiebot.com',
+    'https://imgsct.cookiebot.com',
+  ];
+  return array_merge($urls, $hosts);
+}, 10, 2);
