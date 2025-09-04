@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <h2 class="section-title"><?php pll_e( 'Локации', 'tinqin' ) ?></h2>
 
       <div class="contact-tab spacing-bottom-s">
-        <!-- TAB HEADERS (semantic: buttons, so we can include mailto links inside) -->
+        <!-- TAB HEADERS -->
         <ul class="nav" id="GMSwitcher" role="tablist">
           <li class="nav-item">
             <button type="button" class="nav-link contacts-panel active" id="paris-tab" data-target="#paris" role="tab" aria-controls="paris" aria-selected="true">
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <li class="nav-item">
             <button type="button" class="nav-link contacts-panel" id="sofia-tab" data-target="#sofia" role="tab" aria-controls="sofia" aria-selected="false">
               <h3>TINQIN Sofia</h3>
-              <span class="mb-3">Megapark, étage 5</span>
+              <span class="mb-3">Megapark Offices, étage 5</span>
               <span class="meta">+359 2 805 68 98</span>
               <span class="meta"><a href="mailto:engage@tinqin.com">engage@tinqin.com</a></span>
             </button>
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <li class="nav-item">
             <button type="button" class="nav-link contacts-panel" id="varna-tab" data-target="#varna" role="tab" aria-controls="varna" aria-selected="false">
               <h3>TINQIN Varna</h3>
-              <span class="mb-3">12 rue Jan Palach, étage 2, office 101</span>
+              <span class="mb-3">12 Jan Palach, office 101</span>
               <span class="meta">+359 2 805 68 70</span>
               <span class="meta"><a href="mailto:engage@tinqin.com">engage@tinqin.com</a></span>
             </button>
@@ -130,17 +130,48 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 
 <div class="container mt-3 mb-5 mt-lg-5 mb-lg-5">
-  <div class="row">
-    <div class="col-md-6" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500">
+  <div class="row text-md-left">
+    <div class="col-12 col-md-6 mb-4 mb-md-0" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500">
       <h2 class="section-title"><?php pll_e( 'TINQIN продажби', 'tinqin' ) ?></h2>
-      <p class="section-subtitle"><a href="mailto:sales@tinqin.com">sales@tinqin.com</a></p>
+      <p class="section-subtitle email-link">
+        <a href="mailto:sales@tinqin.com">sales@tinqin.com</a>
+      </p>
     </div>
-    <div class="col-md-6" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="650">
+    <div class="col-12 col-md-6" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="650">
       <h2 class="section-title"><?php pll_e( 'TINQIN кариери', 'tinqin' ) ?></h2>
-      <p class="section-subtitle"><a href="mailto:careers@tinqin.com">careers@tinqin.com</a></p>
+      <p class="section-subtitle email-link">
+        <a href="mailto:engage@tinqin.com">engage@tinqin.com</a>
+      </p>
     </div>
   </div>
 </div>
+
+<style>
+/* Mobile-first fix for email links */
+.email-link a {
+  display:inline-block;
+  padding:10px 14px;
+  border:1px solid var(--tq-red);
+  border-radius:8px;
+  font-weight:600;
+  font-size:16px;
+  color:var(--tq-red);
+  background:#fff;
+}
+.email-link a:hover {
+  background:var(--tq-red);
+  color:#fff;
+}
+@media (max-width:767px){
+  .email-link a {
+    font-size:15px;
+    width:100%; /* full-width button feel */
+    text-align:center;
+  }
+}
+</style>
+
+
 
 <?php
   } // while

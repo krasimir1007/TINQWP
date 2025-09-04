@@ -1,6 +1,16 @@
   <!-- Footer -->
   <footer >
-	<img src="<?php echo get_template_directory_uri(); ?>/images/footer-background.webp" />
+  <picture>
+    <!-- Mobile (max 1200px) -->
+    <source 
+      media="(max-width: 800px)" 
+      srcset="<?php echo get_template_directory_uri(); ?>/images/footer-background1.webp">
+
+    <!-- Default / Desktop -->
+    <img 
+      src="<?php echo get_template_directory_uri(); ?>/images/footer-background.webp" 
+      alt="Footer Background">
+  </picture>
 	<div class="container mb-lg-4 mb-md-3 mb-sm-1">
 		<div class="row  d-flex justify-content-center">
 		  
@@ -73,8 +83,6 @@
     </div>
   </footer>
   
-
-
   <?php wp_footer(); ?>
 </body>
 

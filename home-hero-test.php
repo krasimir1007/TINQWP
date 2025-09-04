@@ -154,6 +154,33 @@ get_header();
 .home-hero{padding:clamp(54px,5vw,14px) 0 16px; background:var(--bg);}
 }
 
+/* Pill button — visible only on mobile */
+.see-all-news-link {
+  display:inline-block;
+  text-align:center;
+  padding:10px 28px;
+  border:2px solid var(--tq-red);
+  border-radius:999px;
+  font-weight:600;
+  color:var(--tq-red);
+  background:#fff;
+  text-decoration:none;
+  transition:all .25s ease;
+  margin:12px auto;
+}
+
+/* Hover effect */
+.see-all-news-link:hover {
+  background:var(--tq-red);
+  color:#fff;
+}
+
+/* Hide on desktop, show on mobile */
+@media (min-width:768px) {
+  .see-all-news-link { display:none; }
+}
+
+
 </style>
 
 
@@ -223,16 +250,18 @@ get_header();
             if( $news ){
               ?>
 
-  <div class="container" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>
-    <div class="row">
-      <div class="col-8 mb-lg-4 mb-md-3">
-        <h2 class="section-title"><a href="<?php echo get_permalink( pll_get_post( 94 ) ); ?>"><?php echo function_exists('pll__') ? pll__('Latest from TINQIN') : 'Latest from TINQIN'; ?></a></h2>
+  <div class="container container-nopad" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>
+<div class="row align-items-center mb-3">
+  <div class="col-12">
+    <h2 class="section-title mb-0">
+      <a href="<?php echo get_permalink( pll_get_post( 94 ) ); ?>">
+        <?php echo function_exists('pll__') ? pll__('Latest from TINQIN') : 'Latest from TINQIN'; ?>
+      </a>
+    </h2>
+  </div>
 
-      </div>
-      <div class="col-4 text-right">
-        <a href="<?php echo get_permalink( pll_get_post( 94 ) ); ?>"><?php pll_e( '>>', 'tinqin' ) ?></a>
-      </div>
-    </div>
+</div>
+
     <div class="row">
 
               <?php
@@ -241,7 +270,7 @@ get_header();
 				
                 ?>
 
-      <div class="col-lg-4 col-md-6 team-panel mb-lg-5 mb-4"  data-aos="fade-up" data-aos-duration='1000' data-aos-delay='<?php echo $delay; ?>'>
+      <div class="col-lg-4 col-md-6 team-panel mb-lg-2 mb-1"  data-aos="fade-up" data-aos-duration='1000' data-aos-delay='<?php echo $delay; ?>'>
         <a href="<?php echo get_permalink( $position->ID ); ?>">
 			<div style="">
           <img src="<?php echo get_the_post_thumbnail_url( $position->ID ) ?>" alt="<?php echo $position->post_title; ?>" class="img-fluid" />
@@ -255,7 +284,14 @@ get_header();
 				$delay += 150;
               }
               ?>
-    </div>
+    <div class="col-12 mt-2 text-center">
+  <a href="<?php echo get_permalink( pll_get_post( 94 ) ); ?>" class="see-all-news-link">
+    <?php echo function_exists('pll__') ? pll__('See all news') : 'See all news'; ?>
+  </a>
+</div>
+
+	</div>
+	
   </div>  
 
             <?php
@@ -275,21 +311,21 @@ get_header();
       <div class="row mt-3 mb-3">
         <div class="col-md-4 text-center"  data-aos="fade-up" data-aos-duration='1000' data-aos-delay='350'>
 			<div class="d-flex justify-content-center align-items-center" style="height:100px;">
-				          <img src="<?php echo get_template_directory_uri(); ?>/images/tinqin-consultants.svg"  /  style="height:100%;">
+				          <img src="<?php echo get_template_directory_uri(); ?>/images/tinqin-consultants.svg"  /  style="height:100%;" alt="value - consultative">
 			</div>
 
           <h5 class="mt-4"><?php pll_e( 'Познаваме клиентите ти, познаваме бизнеса ти! Нашите консултантите са на твое разположение!' ) ?></h5>
         </div>
         <div class="col-md-4 pt-3-small text-center "  data-aos="fade-up" data-aos-duration='1000' data-aos-delay='500'>
 			<div class="d-flex justify-content-center align-items-center" style="height:100px;">
-				          <img src="<?php echo get_template_directory_uri(); ?>/images/tinqin-technology.svg" /  style="height:100%;">
+				          <img src="<?php echo get_template_directory_uri(); ?>/images/tinqin-technology.svg" /  style="height:100%;" alt="value - technology">
 			</div>
 
           <h5 class="mt-4"><?php pll_e( 'Използваме последните и най-добри технологии, не следваме модите - създаваме ги!' ) ?></h5>
         </div>
         <div class="col-md-4 pt-3-small text-center"  data-aos="fade-up" data-aos-duration='1000' data-aos-delay='650'>
 			<div class="d-flex justify-content-center align-items-center" style="height:100px;">
-				          <img src="<?php echo get_template_directory_uri(); ?>/images/tinqin-quality.svg" / style="height:90%;">
+				          <img src="<?php echo get_template_directory_uri(); ?>/images/tinqin-quality.svg" / style="height:90%;" alt="value - qiallity">
 			</div>
 
           <h5 class="mt-4"><?php pll_e( 'Фокусирани сме върху качеството и доброто изживяване за крайния потребител! Клиентите и служителите ти до заслужават!' ) ?></h5>

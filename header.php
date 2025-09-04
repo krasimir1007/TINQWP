@@ -19,18 +19,7 @@
   }
   ?>
 
-  <!-- hreflang alternates (Polylang) -->
-  <?php if ( function_exists('pll_the_languages') ):
-    $langs = pll_the_languages(['raw'=>true]);
-    if ( $langs ) {
-      foreach ( $langs as $l ) {
-        $hreflang = substr($l['locale'], 0, 2); // en, fr, bg
-        printf('<link rel="alternate" href="%s" hreflang="%s" />'."\n",
-          esc_url($l['url']), esc_attr($hreflang));
-      }
-      printf('<link rel="alternate" href="%s" hreflang="x-default" />'."\n", esc_url(pll_home_url()));
-    }
-  endif; ?>
+
 
   <title><?php
     if ( is_home() || is_front_page() ) {
@@ -44,6 +33,9 @@
 
   wp_head();
   ?>
+  <link rel="stylesheet" id='bootstrap-used-css' href="/wp-content/themes/tinqin/css/bootstrap-used-subset.css" type='text/css' media='all' />  
+  <link rel='stylesheet' id='tinqin-css' href='https://www.tinqin.com/wp-content/themes/tinqin/css/tinqin.css' type='text/css' media='all' />
+
 </head>
 
 
@@ -156,29 +148,3 @@
     </nav>
 		  </div>
   </div>
-  <script>
-  (function () {
-    var trigger = document.getElementById('MobileMenuTrigger');
-    var wrap    = document.getElementById('MobileMenuContainer');
-
-    if (!trigger || !wrap) return;
-
-    // Sync "hamburger--spin" animation and lock body scroll while open
-    function toggleBodyLock(on){ document.documentElement.style.overflow = on ? 'hidden' : ''; }
-
-    trigger.addEventListener('click', function () {
-      // Bootstrap handles .show; we just flip the animated hamburger class
-      trigger.classList.toggle('is-active');
-      var open = wrap.classList.contains('show');
-      toggleBodyLock(!open);
-    });
-
-    // Also listen for Bootstrap collapse events if present
-    document.addEventListener('shown.bs.collapse', function(e){
-      if (e.target === wrap){ toggleBodyLock(true); trigger.classList.add('is-active'); }
-    });
-    document.addEventListener('hidden.bs.collapse', function(e){
-      if (e.target === wrap){ toggleBodyLock(false); trigger.classList.remove('is-active'); }
-    });
-  })();
-</script>

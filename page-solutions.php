@@ -1,28 +1,20 @@
 <?php
 /**
  * Template Name: Solutions
- * The main template file
+ * Description: Solutions landing page. Wrapper template, actual markup in template-parts/single/content-solutions.php
  *
- * This is the most generic template file in a WordPress theme
- * and one of the two required files for a theme (the other being style.css).
- * It is used to display a page when nothing more specific matches a query.
- * E.g., it puts together the home page when no home.php file exists.
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package WordPress
- * @subpackage Twenty_Nineteen
- * @since 1.0.0
+ * @package TINQIN
  */
+
 get_header();
 
-// Determine current page
-if ( have_posts() ) {
-	// Load posts loop.
-	while ( have_posts() ) {
-		the_post();
-		get_template_part( 'template-parts/single/content', 'solutions' );
-	}
-	
-}
+if ( have_posts() ) :
+  while ( have_posts() ) :
+    the_post();
+    get_template_part( 'template-parts/single/content', 'solutions' );
+  endwhile;
+else :
+  echo '<main class="container py-4"><p>No content found.</p></main>';
+endif;
+
 get_footer();

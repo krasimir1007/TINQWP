@@ -1,4 +1,6 @@
 <?php
+
+
 /*************************************************
  * ASSETS: single, clean enqueue with scoping
  *************************************************/
@@ -34,6 +36,23 @@ add_action('init', function () {
   }
 }, 0);
 
+add_action('wp_enqueue_scripts', function () {
+  // If your theme enqueues another Bootstrap script, remove it to avoid duplicates:
+  wp_dequeue_script('bootstrap');
+  wp_deregister_script('bootstrap');
+
+  // Enqueue the official bundle, dependent on jQuery, in the footer
+  wp_enqueue_script(
+    'bootstrap-bundle',
+    'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js',
+    ['jquery'],
+    '4.5.2',
+    true
+  );
+}, 99);
+
+
+
 // Belt & suspenders: dequeue/deregister late in the chain in case plugins re-add them
 add_action('wp_enqueue_scripts', function () {
   if (is_admin()) return;
@@ -54,12 +73,11 @@ add_action('wp_enqueue_scripts', function () {
   }
 }, 999);
 
-/** 4) Page‑scoped assets (example placeholder) */
+/** 4)  assets (example placeholder) */
 function tinqin_enqueue_about_assets() {
   if (is_page([63, 336, 652])) {
     // Example:
-    // wp_enqueue_style('slick', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css', [], '1.8.1');
-    // wp_enqueue_script('slick', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js', ['jquery'], '1.8.1', true);
+
   }
 }
 add_action('wp_enqueue_scripts', 'tinqin_enqueue_about_assets', 30);
@@ -89,26 +107,6 @@ function tinqin_defer_scripts($tag, $handle) {
 }
 add_filter('script_loader_tag', 'tinqin_defer_scripts', 10, 2);
 
-/** 7) DNS prefetch (optional) */
-function tinqin_dns_hints() {
-  echo '<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">' . "\n";
-  echo '<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">' . "\n";
-  echo '<link rel="dns-prefetch" href="https://stackpath.bootstrapcdn.com">' . "\n";
-}
-add_action('wp_head', 'tinqin_dns_hints', 1);
-
-/** 8) Global assets (Bootstrap CSS + local theme CSS; Bootstrap JS bundle in footer) */
-add_action('wp_enqueue_scripts', function () {
-  // Fonts & core styles
-  wp_enqueue_style('tinqin-fonts', 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap', [], null);
-  wp_enqueue_style('bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css', [], '4.5.2');
-  wp_enqueue_style('hamburgers', get_template_directory_uri() . '/css/hamburgers.css', [], null);
-  wp_enqueue_style('tinqin', get_template_directory_uri() . '/css/tinqin.css', ['bootstrap','hamburgers'], filemtime(get_stylesheet_directory() . '/css/tinqin.css'));
-
-  // Core scripts
-  wp_enqueue_script('jquery'); // uses the footer-registered core jQuery above
-  wp_enqueue_script('bootstrap-bundle', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js', ['jquery'], '4.5.2', true);
-});
 
 /** 9) Remove WP block editor frontend CSS on home as an extra guard (safe duplicate) */
 add_action('wp_enqueue_scripts', function () {
@@ -586,6 +584,7 @@ function register_strings() {
         // Home page buttons
         pll_register_string( '14 GetQuoteBtn',              'Поискай оферта',                   'tinqin', false );
         pll_register_string( '15 MeetTheTeamBtn',           'Запознай се с екипа',              'tinqin', false );
+		pll_register_string( '16 SeeAllNews',       'See all news', 'tinqin', false );
 
         // Testimonials
         pll_register_string( '16 TestimonialsTitle',        'Стани един от доволните ни клиенти!','tinqin', false );
@@ -1161,295 +1160,3 @@ function staff_field( $meta_boxes ) {
 }
 add_filter( 'rwmb_meta_boxes', 'staff_field' );
 
-// Mail content composer
-function return_mail_content( $name, $mail, $phone, $message, $type = 'contact-form', $post_id = null, $location = null, $team = null ){
-
-	switch( $type ){
-		case 'contact-form':
-
-			$origin 		= 'TINQIN\'s Contact page';
-			$content 		= '<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;">
-					<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-						<td valign="middle" class="bg_light footer email-section" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #fafafa;padding: 1.5em;border-top: 1px solid rgba(0,0,0,.05);color: rgba(0,0,0,.5);mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-								<table style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-										<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-right: 10px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Sender</h3>
-															<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $name . '</p>
-														</td>
-													</tr>
-												</table>
-											</td>
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-left: 5px;padding-right: 5px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Contact Info</h3>
-															<ul style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;margin: 0;padding: 0;">
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $mail . '</span>
-																</li>
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $phone . '</span>
-																</li>
-															</ul>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>';
-		break;
-		case 'service-products-form':
-
-			$origin 		= 'TINQIN\'s Services & Products catalogue';
-			$permalink 		= get_permalink( $post_id );
-			$item_name		= get_the_title( $post_id );
-			$content 		= '<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;">
-					<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-						<td valign="middle" class="bg_light footer email-section" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #fafafa;padding: 1.5em;border-top: 1px solid rgba(0,0,0,.05);color: rgba(0,0,0,.5);mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-								<table style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-										<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-right: 10px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Sender</h3>
-															<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $name . '</p>
-														</td>
-													</tr>
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-right: 10px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Interested in</h3>
-															<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="' . $permalink . '" style="color: #cd3532; text-decoration: underline;">' . $item_name . '</a></p>
-														</td>
-													</tr>
-												</table>
-											</td>
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-left: 5px;padding-right: 5px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Contact Info</h3>
-															<ul style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;margin: 0;padding: 0;">
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $mail . '</span>
-																</li>
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $phone . '</span>
-																</li>
-															</ul>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>';
-		break;
-		case 'general-application-form':
-
-			$origin 		= 'TINQIN\'s Careers Page';
-			$content 		= '<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;">
-					<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-						<td valign="middle" class="bg_light footer email-section" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #fafafa;padding: 1.5em;border-top: 1px solid rgba(0,0,0,.05);color: rgba(0,0,0,.5);mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-								<table style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-										<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-right: 10px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Sender</h3>
-															<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $name . '</p>
-														</td>
-													</tr>
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-right: 10px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Applied for</h3>
-															<ul style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;margin: 0;padding: 0;">
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">Positions in ' . $location . '</span>
-																</li>
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">For the ' . $team . ' team</span>
-																</li>
-															</ul>
-														</td>
-													</tr>
-												</table>
-											</td>
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-left: 5px;padding-right: 5px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Contact Info</h3>
-															<ul style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;margin: 0;padding: 0;">
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $mail . '</span>
-																</li>
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px; margin-left: 0; padding-left: 0;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $phone . '</span>
-																</li>
-															</ul>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>';
-		break;
-		case 'position-application-form':
-
-			$origin 		= 'TINQIN\'s Services & Products catalogue';
-			$permalink 		= get_permalink( $post_id );
-			$item_name		= get_the_title( $post_id );
-			$content 		= '<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;">
-					<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-						<td valign="middle" class="bg_light footer email-section" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #fafafa;padding: 1.5em;border-top: 1px solid rgba(0,0,0,.05);color: rgba(0,0,0,.5);mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-								<table style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-										<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-right: 10px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Sender</h3>
-															<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $name . '</p>
-														</td>
-													</tr>
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-right: 10px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Applied for</h3>
-															<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="' . $permalink . '" style="color: #cd3532; text-decoration: underline;">' . $item_name . '</a></p>
-														</td>
-													</tr>
-												</table>
-											</td>
-											<td valign="top" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-												<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
-													<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-														<td style="text-align: left;padding-left: 5px;padding-right: 5px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-															<h3 class="heading" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: \'Lato\', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 20px;">Contact Info</h3>
-															<ul style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;margin: 0;padding: 0;">
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $mail . '</span>
-																</li>
-																<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;margin-bottom: 10px;">
-																	<span class="text" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">' . $phone . '</span>
-																</li>
-															</ul>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>';
-		break;
-    case 'recommendation-copy':
-    
-      $origin 		= 'TINQIN Careers';
-      $content 		= '<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;">
-          <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-            <td valign="middle" class="bg_light footer email-section" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #fafafa;padding: 1.5em;border-top: 1px solid rgba(0,0,0,.05);color: rgba(0,0,0,.5);mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-                <p>Dear <strong>' . $name . '</strong>,</p>
-                <p>We have received a job application from <strong>' . $mail . '</strong> who listed you as their referral for a position at TINQIN.</p>
-                <p>If you do not recognize the name of the applicant, we kindly request that you contact our Human Resources department at <a href="mailto:hr@tinqin.com">hr@tinqin.com</a>. Your prompt response will greatly assist us in maintaining the integrity of our referral program and ensuring that only genuine candidates are considered.</p>
-                <p>Thank you for your cooperation.</p>
-                <p>HR Team</p>
-                </td>
-              </tr>
-            </table>';
-    break;
-	}
-
-	// HTML template for the mail
-	$header = '<!DOCTYPE html><html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #f1f1f1;margin: 0 auto !important;padding: 0 !important;height: 100% !important;width: 100% !important;"><head style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <meta charset="utf-8" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <meta name="viewport" content="width=device-width" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <meta http-equiv="X-UA-Compatible" content="IE=edge" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <meta name="x-apple-disable-message-reformatting" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <title style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"></title> <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <style style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">/* What it does: Remove spaces around the email design added by some email clients. */ /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */ html,body{margin: 0 auto !important; padding: 0 !important; height: 100% !important; width: 100% !important; background: #f1f1f1;}/* What it does: Stops email clients resizing small text. */*{-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;}/* What it does: Centers email on Android 4.4 */div[style*="margin: 16px 0"]{margin: 0 !important;}/* What it does: Stops Outlook from adding extra spacing to tables. */table,td{mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important;}/* What it does: Fixes webkit padding issue. */table{border-spacing: 0 !important; border-collapse: collapse !important; table-layout: fixed !important; margin: 0 auto !important;}/* What it does: Uses a better rendering method when resizing images in IE. */img{-ms-interpolation-mode:bicubic;}/* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */a{text-decoration: none;}/* What it does: A work-around for email clients meddling in triggered links. */*[x-apple-data-detectors], /* iOS */.unstyle-auto-detected-links *,.aBn{border-bottom: 0 !important; cursor: default !important; color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important;}/* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */.a6S{display: none !important; opacity: 0.01 !important;}/* What it does: Prevents Gmail from changing the text color in conversation threads. */.im{color: inherit !important;}/* If the above doesn\'t work, add a .g-img class to any image in question. */img.g-img + div{display: none !important;}/* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89 *//* Create one of these media queries for each additional viewport size you\'d like to fix *//* iPhone 4, 4S, 5, 5S, 5C, and 5SE */@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width: 320px !important;}}/* iPhone 6, 6S, 7, 8, and X */@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width: 375px !important;}}/* iPhone 6+, 7+, and 8+ */@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width: 414px !important;}}</style> <style style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">.primary{background: #30e3ca;}.bg_white{background: #ffffff;}.bg_light{background: #fafafa;}.bg_black{background: #000000;}.bg_dark{background: rgba(0,0,0,.8);}.email-section{padding:1.5em;}/*BUTTON*/.btn{padding: 10px 15px;display: inline-block;}.btn.btn-primary{border-radius: 5px;background: #30e3ca;color: #ffffff;}.btn.btn-white{border-radius: 5px;background: #ffffff;color: #000000;}.btn.btn-white-outline{border-radius: 5px;background: transparent;border: 1px solid #fff;color: #fff;}.btn.btn-black-outline{border-radius: 0px;background: transparent;border: 2px solid #000;color: #000;font-weight: 700;}h1,h2,h3,h4,h5,h6{font-family: \'Lato\', sans-serif;color: #000000;margin-top: 0;font-weight: 400;}body{font-family: \'Lato\', sans-serif;font-weight: 400;font-size: 15px;line-height: 1.8;color: rgba(0,0,0,.4);}a{color: #30e3ca;}table{}/*LOGO*/.logo h1{margin: 0;}.logo h1 a{color: #30e3ca;font-size: 24px;font-weight: 700;font-family: \'Lato\', sans-serif;}/*HERO*/.hero{position: relative;z-index: 0;}.hero .text{color: rgba(0,0,0,.8);}.hero .text h2{color: #000;font-size: 40px;margin-bottom: 0;font-weight: 400;line-height: 1.4;}.hero .text h3{font-size: 24px;font-weight: 300;}.hero .text h2 span{font-weight: 600;color: #30e3ca;}/*HEADING SECTION*/.heading-section{}.heading-section h2{color: #000000;font-size: 28px;margin-top: 0;line-height: 1.4;font-weight: 400;}.heading-section .subheading{margin-bottom: 20px !important;display: inline-block;font-size: 13px;text-transform: uppercase;letter-spacing: 2px;color: rgba(0,0,0,.4);position: relative;}.heading-section .subheading::after{position: absolute;left: 0;right: 0;bottom: -10px;content: \'\';width: 100%;height: 2px;background: #30e3ca;margin: 0 auto;}.heading-section-white{color: rgba(255,255,255,.8);}.heading-section-white h2{font-family: line-height: 1;padding-bottom: 0;}.heading-section-white h2{color: #ffffff;}.heading-section-white .subheading{margin-bottom: 0;display: inline-block;font-size: 13px;text-transform: uppercase;letter-spacing: 2px;color: rgba(255,255,255,.4);}ul.social{padding: 0;}ul.social li{display: inline-block;margin-right: 10px;}/*FOOTER*/.footer{border-top: 1px solid rgba(0,0,0,.05);color: rgba(0,0,0,.5);}.footer .heading{color: #000;font-size: 20px;}.footer ul{margin: 0;padding: 0;}.footer ul li{list-style: none;margin-bottom: 10px;}.footer ul li a{color: rgba(0,0,0,1);}@media screen and (max-width: 500px){}</style></head><body width="100%" style="margin: 0 auto !important;padding: 0 !important;mso-line-height-rule: exactly;background-color: #f1f1f1;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #f1f1f1;font-family: \'Lato\', sans-serif;font-weight: 400;font-size: 15px;line-height: 1.8;color: rgba(0,0,0,.4);height: 100% !important;width: 100% !important;"><center style="width: 100%;background-color: #f1f1f1;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <div style="display: none;font-size: 1px;max-height: 0px;max-width: 0px;opacity: 0;overflow: hidden;mso-hide: all;font-family: sans-serif;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; </div><div style="max-width: 600px;margin: 0 auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="email-container"> <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;"> <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <td valign="middle" class="hero bg_white" style="padding: 3em 0 2em 0;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #ffffff;position: relative;z-index: 0;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;"> <img src="' . get_template_directory_uri() . '/images/logo.png" alt="TINQIN" style="width: 300px;max-width: 600px;height: auto;margin: auto;display: block;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;-ms-interpolation-mode: bicubic;"> </td></tr></table>';
-
-	if( $message != null ) $text = '<table style="width: 100%; background: #fff; -ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;"> <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <td style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;"> <div class="text" style="padding: 20px 2.5em;text-align: center;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: rgba(0,0,0,.8);"> ' . $message . ' </div></td></tr></table>'; else $text = '';
-
-	$footer = '</td></tr></table> <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;"> <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> <td class="bg_light" style="text-align: center;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: #fafafa;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;"> <p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">This message was generated by ' . $origin . ' on ' . date( 'd.m.Y', strtotime('now') ) . ' at ' . date( 'H:i', strtotime('now') ) . '</p></td></tr></table> </div></center></body></html>';
-
-	// Compose the mail
-	$html = $header.$content.$text.$footer;
-	return $html;
-}
-
-// Validate data
-function tinqin_validate_forms( $post, $attachments = null ){
-	// the form has been submited
-	$type 		= sanitize_text_field( $post['form-type'] );
-	$name 		= sanitize_text_field( $post['sender-name'] );
-	$mail 		= sanitize_email( $post['sender-email'] );
-	$phone 		= sanitize_text_field( $post['sender-phone'] );
-	$message	= sanitize_textarea_field( $post['msg'] );
-
-	switch ( $type ) {
-		case 'position-application-form':
-			if( !empty( $name ) && !empty( $mail ) && $mail != '' && !empty( $phone ) && !empty( $attachments ) ){
-				return true;
-			}
-			else{
-				if( $mail == '' ){
-					return pll__( 'Въведеният Email е невалиден', 'tinqin' );
-				}
-				else
-					return pll__( 'Всички полета са задължителни', 'tinqin' );
-			}
-			break;
-		case 'general-application-form':
-			if( !empty( $name ) && !empty( $mail ) && $mail != '' && !empty( $phone ) && !empty( $attachments ) ){
-				return true;
-			}
-			else{
-				if( $mail == '' ){
-					return pll__( 'Въведеният Email е невалиден', 'tinqin' );
-				}
-				else
-					return pll__( 'Всички полета са задължителни', 'tinqin' );
-			}
-			break;
-		default:
-			// required fields for the contacts form
-			if( !empty( $name ) && !empty( $mail ) && $mail != '' && !empty( $phone ) && !empty( $message ) ){
-				return pll__( 'Попълнете всички задължителни полета', 'tinqin' );
-			}
-			else{
-				if( $mail == false ){
-					return pll__( 'Въведеният Email е невалиден', 'tinqin' );
-				}
-				else{
-					return true;
-				}
-			}
-			break;
-	}
-	
-}
-
-
-
-/* ==== PERFORMANCE: Cookiebot + hints ==== */
-
-// Preconnect to Cookiebot hosts (faster TLS handshake)
-add_filter('wp_resource_hints', function($urls, $relation_type){
-  if ($relation_type !== 'preconnect' && $relation_type !== 'dns-prefetch') return $urls;
-  $hosts = [
-    'https://consent.cookiebot.com',
-    'https://consentcdn.cookiebot.com',
-    'https://imgsct.cookiebot.com',
-  ];
-  return array_merge($urls, $hosts);
-}, 10, 2);

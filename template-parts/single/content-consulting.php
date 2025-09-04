@@ -3,7 +3,7 @@
 global $post;
 ?>
 
-<div class="container mt-lg-5 mt-3 pt-5 pb-3">
+<div class="container mt-lg-5 mt-5 pt-5 pb-3">
   <div class="row">
 	<div class="col-12">
      <h2 class="section-title"><?php the_title(); ?></h2>
@@ -122,25 +122,27 @@ global $post;
   ?> 
 
 
-  <!-- Clients -->
-  <div class="container mt-lg-5 mb-lg-5 mt-3 mb-3" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>
-    <section class="customer-logos slider">
-      <?php
-
-        $logos = get_posts( array(
-            'post_type'     => 'testimonials',
-            'numberposts'   => -1
-        ) );
-        if( $logos )
-          foreach ($logos as $logo) {
-
-            $file = rwmb_meta( 'tq-client-slider', '', $logo->ID );
-
-            ?>
-      <div class="slide"><img src="<?php echo get_the_post_thumbnail_url( $logo->ID ) ?>" alt="<?php echo $logo->post_title; ?>"></div>
-            <?php
+    <!-- Clients (grid, no slider) -->
+    <div class="container mt-5 mb-5" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+      <section class="home-hero-logos" aria-label="Нашите клиенти">
+	     <h2 class="section-title"><?php pll_e('Стани един от доволните ни клиенти!'); ?></h2>
+        <div class="customer-logos customer-logos-teams grid">
+          <?php
+          $logos = get_posts([
+            'post_type'   => 'testimonials',
+            'numberposts' => -1,
+          ]);
+          if ( $logos ) {
+            foreach ( $logos as $logo ) {
+              $src = get_the_post_thumbnail_url( $logo->ID, 'full' );
+              if ( ! $src ) { continue; }
+              $src = esc_url( set_url_scheme( $src, 'https' ) );
+              $alt = esc_attr( get_the_title( $logo->ID ) );
+              echo '<div class="slide"><img src="'.$src.'" alt="'.$alt.'" loading="lazy" decoding="async"></div>';
+            }
           }
-
-      ?>
-    </section>
-  </div>
+          wp_reset_postdata();
+          ?>
+        </div>
+      </section>
+    </div>	

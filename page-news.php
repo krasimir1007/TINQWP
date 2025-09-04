@@ -42,38 +42,39 @@ if ( have_posts() ) {
 					]);
 					?>
 				 
-				<?php if ( $wpb_all_query->have_posts() ) : ?>
-				 
-				<div class="row">
-				 
-				    <!-- the loop -->
-				    <?php $i=1; $delay = 200; while ( $wpb_all_query->have_posts() ) : $wpb_all_query->the_post(); ?>
-					      <div class="col-lg-4 col-md-6 team-panel mb-4" <?php if($i>3){ ?> data-aos="fade-up" data-aos-duration='1000' data-aos-delay='<?php echo $delay; ?>'<?php } ?>>
-							 <div class="card-news">
-								 
-					        <a href="<?php the_permalink(); ?>">
-								 <div  style="height:190px; overflow:hidden;">
-								   <img src="<?php echo get_the_post_thumbnail_url( $post->ID ) ?>" alt="<?php the_title(); ?>" class="img-fluid" />
-							  </div>
-					         <div class="card-body">
-								<small class="post-date mt-1 "><i class="fas fa-calendar-alt"></i> <?php echo get_the_date( false, $post->ID ); ?></small>
-								<h3 class="mt-2 mb-2 card-title"><?php the_title(); ?></h3>
-							 </div>
-					        </a>
+					<?php if ( $wpb_all_query->have_posts() ) : ?>
+					  <div class="row">
+						<?php while ( $wpb_all_query->have_posts() ) : $wpb_all_query->the_post(); ?>
+						  <div class="col-lg-4 col-md-6 mb-1">
+							<article class="team-panel">
+							  <a href="<?php the_permalink(); ?>" class="stretched-link">
+								<?php if ( has_post_thumbnail() ) : ?>
+								  <img
+									src="<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'large' ) ); ?>"
+									alt="<?php the_title_attribute(); ?>"
+									class="img-fluid"
+									loading="lazy"
+								  />
+								<?php else : ?>
+								  <img
+									src="<?php echo esc_url( get_template_directory_uri() . '/img/placeholder-16x9.jpg' ); ?>"
+									alt="<?php the_title_attribute(); ?>"
+									class="img-fluid"
+									loading="lazy"
+								  />
+								<?php endif; ?>
+
+								<div class="card-body">
+								  <h3 class="card-title"><?php the_title(); ?></h3>
+								</div>
+							  </a>
+							</article>
+						  </div>
+						<?php endwhile; wp_reset_postdata(); ?>
+					  </div>
+					<?php endif; ?>
 
 
-					      </div>
-				 
-				    <!-- end of the loop -->
-				 
-							  </div>
-					   <?php $delay += 20; $i++; endwhile; ?>
-				</div>
-				<?php wp_reset_postdata(); ?>
-				 
-				<?php else : ?>
-				    <p><?php _e( 'Sorry, no posts matched your criteria.' ); ?></p>
-				<?php endif; ?>
 
 			</div>
 		</div>

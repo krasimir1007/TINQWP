@@ -1,8 +1,41 @@
 <?php
-/* Template Name: Careers Page (Clean) */
+/* Template Name: BG Careers Page */
 defined('ABSPATH') || exit;
+
+
+function tinqin_wrap_iframes_in_responsive_div( $content ) {
+    // Look for any iframe and wrap it
+    $pattern = '~<iframe[^>]+></iframe>|<iframe.*?</iframe>~is';
+    $replacement = '<div class="responsive-video">$0</div>';
+    return preg_replace( $pattern, $replacement, $content );
+}
+add_filter( 'the_content', 'tinqin_wrap_iframes_in_responsive_div' );
+
+
 ?>
 
+<style>
+/* Responsive video wrapper */
+.responsive-video {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.responsive-video iframe,
+.responsive-video object,
+.responsive-video embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+</style>
 
 <div class="container mt-5 pt-5">
   <div class="row">
@@ -20,35 +53,56 @@ defined('ABSPATH') || exit;
 // Career news, BG only, category 199
 $career_news = new WP_Query(array(
   'post_type'           => 'post',
-  'posts_per_page'      => 6,          // use -1 for all, change to 6 if you want a cap
+  'posts_per_page'      => 6,   // use -1 for all, change to 6 if you want a cap
   'cat'                 => 199,
   'orderby'             => 'date',
   'order'               => 'DESC',
   'ignore_sticky_posts' => true,
-  'suppress_filters'    => false,       // Polylang
-  'lang'                => 'bg'         // Polylang safety
+  'suppress_filters'    => false, // Polylang
+  'lang'                => 'bg'   // Polylang safety
 ));
-if ($career_news->have_posts()) : ?>
-  <div class="container mt-5">
+
+if ( $career_news->have_posts() ) : ?>
+  <div class="container mt-5 container-nopad">
     <div class="row">
       <div class="col-12">
         <h2 class="section-title">Кариерни Новини</h2>
       </div>
     </div>
     <div class="row">
-      <?php while ($career_news->have_posts()) : $career_news->the_post(); ?>
-        <div class="col-lg-4 col-md-6 mb-4">
-          <a href="<?php the_permalink(); ?>">
-            <img class="img-fluid"
-                 src="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'medium_large')); ?>"
-                 alt="<?php echo esc_attr(get_the_title()); ?>">
-            <h3 class="h5 mt-2"><?php the_title(); ?></h3>
-          </a>
+      <?php while ( $career_news->have_posts() ) : $career_news->the_post(); ?>
+        <div class="col-lg-4 col-md-6 mb-1">
+          <article class="team-panel">
+            <a href="<?php the_permalink(); ?>" class="stretched-link">
+              <?php if ( has_post_thumbnail() ) : ?>
+                <img
+                  src="<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'large' ) ); ?>"
+                  alt="<?php the_title_attribute(); ?>"
+                  class="img-fluid"
+                  loading="lazy"
+                />
+              <?php else : ?>
+                <img
+                  src="<?php echo esc_url( get_template_directory_uri() . '/img/placeholder-16x9.jpg' ); ?>"
+                  alt="<?php the_title_attribute(); ?>"
+                  class="img-fluid"
+                  loading="lazy"
+                />
+              <?php endif; ?>
+
+              <div class="card-body">
+                <h3 class="card-title"><?php the_title(); ?></h3>
+              </div>
+            </a>
+          </article>
         </div>
       <?php endwhile; wp_reset_postdata(); ?>
     </div>
   </div>
 <?php endif; ?>
+
+
+
 
 
 <?php if ( (int) get_queried_object_id() === 216 ) : ?>

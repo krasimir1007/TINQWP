@@ -1,7 +1,7 @@
 <?php
 // Template name: Products page content
 ?>
-<div class="container mt-lg-5 mb-3 pt-lg-5 mt-3 pt-5">
+<div class="container mt-lg-5 mb-5 pt-lg-5 mt-3 pt-5">
   <div class="row">
     <div class="col-md-12">
            <h2 class="section-title"><?php the_title(); ?></h2>
@@ -39,7 +39,7 @@
           if( $i % 2 ) { $content_class = 'order-md-last'; $picture_class = 'order-md-first'; } else { $content_class = 'order-md-first'; $picture_class = 'order-md-last'; }
 					?>
             <div class="row mt-lg-5 mb-md-3">
-              <div class="col-lg-4 col-md-4 mb-4 d-flex align-items-lg-stretch align-items-md-stretch <?php echo $picture_class; ?>" <?php if( $i > 2 ){ ?>data-aos="fade-up" data-aos-duration='1000' data-aos-delay='<?php echo $delay; ?>'<?php } ?>>
+              <div class="col-lg-4 col-md-4 mb-4 align-items-lg-stretch align-items-md-stretch <?php echo $picture_class; ?>" <?php if( $i > 2 ){ ?>data-aos="fade-up" data-aos-duration='1000' data-aos-delay='<?php echo $delay; ?>'<?php } ?>>
                  <a class="card list-item card-services <?php echo $palette; ?> <?php echo $card; ?> srike-hover">
                   <div class="card-body" style="background-image: url('<?php echo get_the_post_thumbnail_url( $ac->ID ) ?>') !important; background-size: contain;">
                     <div class="card-body-content">
@@ -165,25 +165,27 @@
 		?>
   </div>
 
-  <!-- Clients -->
-  <div class="container mt-lg-5 mb-lg-5 mt-3 mb-3" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>
-    <section class="customer-logos slider">
-      <?php
-
-        $logos = get_posts( array(
-            'post_type'     => 'testimonials',
-            'numberposts'   => -1
-        ) );
-        if( $logos )
-          foreach ($logos as $logo) {
-
-            $file = rwmb_meta( 'tq-client-slider', '', $logo->ID );
-
-            ?>
-      <div class="slide"><img src="<?php echo get_the_post_thumbnail_url( $logo->ID ) ?>" alt="<?php echo $logo->post_title; ?>"></div>
-            <?php
+    <!-- Clients (grid, no slider) -->
+    <div class="container mt-5 mb-5" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+      <section class="home-hero-logos" aria-label="Нашите клиенти">
+	     <h2 class="section-title"><?php pll_e('Стани един от доволните ни клиенти!'); ?></h2>
+        <div class="customer-logos customer-logos-teams grid">
+          <?php
+          $logos = get_posts([
+            'post_type'   => 'testimonials',
+            'numberposts' => -1,
+          ]);
+          if ( $logos ) {
+            foreach ( $logos as $logo ) {
+              $src = get_the_post_thumbnail_url( $logo->ID, 'full' );
+              if ( ! $src ) { continue; }
+              $src = esc_url( set_url_scheme( $src, 'https' ) );
+              $alt = esc_attr( get_the_title( $logo->ID ) );
+              echo '<div class="slide"><img src="'.$src.'" alt="'.$alt.'" loading="lazy" decoding="async"></div>';
+            }
           }
-
-      ?>
-    </section>
-  </div>
+          wp_reset_postdata();
+          ?>
+        </div>
+      </section>
+    </div>	
