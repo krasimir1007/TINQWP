@@ -7,15 +7,17 @@
 h1,h2,h3,h4,h5,h6,ul,li{font-family:var(--tq-font)!important;font-weight:500;line-height:1.5;margin:0 0 .6rem}
 h1{font-size:2rem;font-weight:800}h2{font-size:22px}h3{font-size:20px}h4{font-size:16px}h5{font-size:15px}h6{font-size:14px}
 h1.fat-title,h2.fat-title,h3.fat-title,h4.fat-title,h5.fat-title,h6.fat-title{font-weight:800!important}h4.font-weight-700{font-weight:700!important;margin-bottom:0}
-p,span,strong{font-family:var(--tq-font)!important}p,span{font-weight:500;font-size:15px;margin:0 0 1rem}
+p,span,strong{font-family:var(--tq-font)!important}p,span{font-weight:500;font-size:1rem;margin:0 0 1rem}
 .section-subtitle{font-size:18px}
 h2.section-title{font-weight:800!important;position:relative;padding-left:35px}
 h2.white{color:#fff;font-weight:800!important}
-h2.section-title::before{content:'';position:absolute;height:20px;width:20px;background:#bf3134;top:6px;left:0}
+h2.section-title::before{content:'';position:absolute;height:20px;width:20px;background:var(--tq-red);top:6px;left:0}
 h2.section-title.sidebar-title{color:#444;padding-left:25px;font-size:20px;line-height:20px}
 h2.section-title.sidebar-title::before{height:15px;width:15px;top:2px;left:0}
 .text-right h2.section-title{padding-left:0;padding-right:35px}
 .text-right h2.section-title::before{left:auto;right:0}
+h4 {font-weight:600;font-size:1.3rem;margin:0 0 1rem}
+
 
 /* Gutenberg centered headings */
 h1.wp-block-heading.has-text-align-center{text-align:center;font-size:2.5em;font-weight:800;margin:20px 0}
@@ -43,8 +45,8 @@ a:hover,a:active{color:#5f110c;text-decoration:none}
 .header-breaker{margin-bottom:0}.navbar{padding:0!important}.navbar .navbar-expand-xl{flex-grow:0}.navbar-nav{justify-content:center}
 .navbar .navbar-nav .nav-link{position:relative;padding:20px 15px 15px;font-weight:600;text-transform:uppercase;color:#611919}
 .navbar .navbar-nav .nav-link::before{content:attr(data-hover);position:absolute;color:#444;transition:transform .3s,opacity .3s}
-.navbar .navbar-nav .nav-link:hover::before,.navbar .navbar-nav .nav-link:focus::before{color:#bf3134}
-.navbar .navbar-nav .nav-link.active::before{color:#fff}.navbar .navbar-nav .nav-link.active:before{color:#BF3134!important}
+.navbar .navbar-nav .nav-link:hover::before,.navbar .navbar-nav .nav-link:focus::before{color:var(--tq-red)}
+.navbar .navbar-nav .nav-link.active::before{color:#fff}.navbar .navbar-nav .nav-link.active:before{color:var(--tq-red)!important}
 
 /* ===== 6) MOBILE NAV OVERLAY ===== */
 @media(max-width:991.98px){
@@ -89,51 +91,80 @@ a:hover,a:active{color:#5f110c;text-decoration:none}
 @media(min-width:992px){.mobile-lang-nav{display:none!important}}
 
 
+/* ==== Unified boxes (BG/FR/EN) — works for both patterns ==== */
+.accent-box,.client-box{background:none}
+.tq-benefits--dark,.accent-box,.client-box{color:#f8fafc;border-radius:12px}
+.tq-benefits--dark .section-title,.tq-benefits--dark .benefits-label,
+.accent-box .section-title,.client-box .section-title{color:#f8fafc}
+.tq-benefits--dark .section-title.no-bullet::before,
+.accent-box .section-title.no-bullet::before,
+.client-box .section-title.no-bullet::before{content:none}
+/* 2) Dark panel when the CONTAINER is the element (your EN/FR markup) */
+.container.tq-benefits.tq-benefits--dark{background:#454f5f;border-radius:12px;padding:32px 16px}
+.tq-benefits--dark>.container,
+.accent-box>.container,
+.client-box>.container{background:#454f5f;border-radius:12px;padding:32px 16px}
+.tq-benefits .row{row-gap:16px}
+.tq-benefits img{width:clamp(56px,8vw,80px);height:auto}
 
-/* ===== 9) LISTS / BENEFITS ===== */
-.benefits-list{padding:0 0 0 20px}.benefits-list.list-reversed{padding:0 20px 0 0}
-.benefits-list li{position:relative;min-height:70px;list-style:none;padding:30px 0 30px 95px;margin-bottom:20px;display:flex;align-items:center;font-size:16px}
-.benefits-list.list-reversed li{padding:30px 95px 30px 0}
-.benefits-list li img{position:absolute;height:75px;width:75px;left:0}
-.benefits-list.list-reversed li img{right:0;left:auto}
-/* Dark variant so white SVGs pop */
-.tq-benefits--dark{background:#454f5f;border-radius:12px}
-.tq-benefits--dark .section-title,.tq-benefits--dark .benefits-label{color:#f8fafc;opacity:1!important}
-.tq-benefits--dark .section-title.no-bullet::before{content:none}
-.tq-benefits--dark img{opacity:1!important;filter:none!important}
 
 
+/* ===== 12) CARDS — fix empty services cards + keep old hover only for generic cards ===== */
 
-/* ===== 11) ACCENT / CLIENT BOXES ===== */
-.accent-box{background:linear-gradient(148deg,#1dc5d7 0%,#199fae 50%,#126f81 100%)}.accent-box-alt{background:#f5f5f7}
-.client-box{background:linear-gradient(133deg,#9fcd29 0%,#93c434 50%,#709935 100%)}.client-box .row{display:flex;justify-content:center;align-items:center}
-.client-box .row .d-none.d-xl-block{text-align:right}.client-box .has-text-align-right{text-align:left;margin-top:20px;margin-bottom:0}
-.accent-box>*,.accent-box-darker>*,.client-box>*{color:#fff}
+/* Base */
+.card.list-item{position:relative;overflow:hidden;border:0;width:100%;border-radius:0!important}
+.card.list-item .card-image{position:relative;width:100%;padding-top:100%;background-size:cover!important;transition:.2s}
 
-/* ===== 12) CARDS ===== */
-.card.list-item{position:relative;border:0;overflow:hidden;border-radius:0!important;width:100%}
-.card.list-item .card-image{background-size:cover!important;position:relative;width:100%;padding-top:100%;transition:.2s all}
-.card.list-item .card-body{display:none;position:absolute;right:100%;width:100%;background:#fff;border:1px solid #eee;opacity:0;animation:cardblur .2s ease-in-out forwards}
-.card.list-item .card-body .card-title{font-size:22px;line-height:1.4;color:#444;margin-bottom:2px}
-.card.list-item .card-body .card-text{font-size:16px;color:#444;margin:0}
-.card.list-item:hover .card-body{display:block;z-index:100;width:calc(100% - 10px);animation:cardhover .2s ease-in-out alternate forwards}
+/* Hover overlay = ONLY for generic list cards (not services/teams) */
+.card.list-item:not(.card-services):not(.card-teams) .card-body{
+  display:none;position:absolute;right:100%;width:100%;background:#fff;border:1px solid #eee;opacity:0;animation:cardblur .2s forwards
+}
+.card.list-item:not(.card-services):not(.card-teams):hover .card-body{
+  display:block;z-index:100;width:calc(100% - 10px);animation:cardhover .2s alternate forwards
+}
+
+/* Restore original services/teams behavior (image visible by default) */
+.card.card-services .card-body,
+.card.card-teams .card-body{
+  display:block!important;position:relative!important;right:auto!important;opacity:1!important;
+  border:0;background-position:center!important;background-size:cover!important;transition:.2s;animation:none;padding:35px 30px
+}
+.card.card-jobs .card-body{padding:30px 20px;height:200px}
+
+.card.card-services .card-title,.card.card-teams .card-title,
+.card.card-services .card-text,.card.card-teams .card-text,
+.card.card-jobs .card-title,.card.card-jobs .card-text{color:#fff}
+
+.card.card-services .card-image,.card.card-teams .card-image{padding-top:0}
+.card.card-services .card-image img,.card.card-teams .card-image img{width:80px}
+
+a.card.list-item.card-services,a.card.list-item.card-teams{height:368px}
+a.card.list-item.card-services .card-body-content,
+a.card.list-item.card-teams .card-body-content{position:relative;bottom:-180px;transition:.4s}
+a.card.list-item.card-services:hover .card-body-content,
+a.card.list-item.card-teams:hover .card-body-content{bottom:0}
+
+a.card.list-item.card-services .card-text,
+a.card.list-item.card-teams .card-text{display:none;position:relative;z-index:1}
+a.card.list-item.card-services:hover .card-text,
+a.card.list-item.card-teams:hover .card-text{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}
+
+/* Animations (unchanged) */
 @keyframes cardhover{0%{opacity:0;right:100%}50%{opacity:.8;right:20%}100%{opacity:1;right:10px}}
 @keyframes cardblur{0%{opacity:1;right:10px}50%{opacity:.8;right:20%}100%{opacity:0;right:100%}}
-.card.card-services .card-body,.card.card-teams .card-body{padding:35px 30px}
-.card.card-jobs .card-body{padding:30px 20px;height:200px}
-.card.card-services .card-body,.card.card-jobs .card-body,.card.card-teams .card-body{position:relative;left:0;width:100%!important;transition:.2s all!important;animation:none!important;display:block;opacity:1}
-.card.card-services .card-title,.card.card-jobs .card-title,.card.card-teams .card-title,.card.card-services .card-text,.card.card-jobs .card-text,.card.card-teams .card-text{color:#fff}
-.card.card-services .card-image,.card.card-teams .card-image{padding-top:0}.card.card-services .card-image img,.card.card-teams .card-image img{width:80px}
-.card.card-teams .card-body,.card.card-services .card-body{background-size:cover!important;background-position:center!important;bottom:0}
-a.card.list-item.card-services.card-offers .card-body{background-position:inherit!important}
-a.card.list-item.card-teams,a.card.list-item.card-services{height:368px}
-a.card.list-item.card-teams .card-body-content,a.card.list-item.card-services .card-body-content{position:relative;bottom:-180px;transition:.4s all}
-a.card.list-item.card-teams .card-title,a.card.list-item.card-services .card-title{position:relative;z-index:1}
-a.card.list-item.card-teams .card-image,a.card.list-item.card-services .card-image{z-index:1;width:70px}
-a.card.list-item.card-teams .card-text,a.card.list-item.card-services .card-text{position:relative;z-index:1;display:none}
-a.card.list-item.card-teams:hover .card-text,a.card.list-item.card-services:hover .card-text{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}
-a.card.list-item.card-teams:hover .card-body,a.card.list-item.card-services:hover .card-body{z-index:auto}
-a.card.list-item.card-teams:hover .card-body-content,a.card.list-item.card-services:hover .card-body-content{bottom:0}
+
+/* === Universal split gutter for Services/Products/Consulting rows === */
+@supports selector(.row:has(.product-card)){
+  /* any row that contains a services image card OR a product-card text column */
+  .row:has(.card.list-item.card-services),
+  .row:has(.product-card){
+    margin-left:-12px;margin-right:-12px;   /* 24px total gap */
+  }
+  .row:has(.card.list-item.card-services)>[class*="col-"],
+  .row:has(.product-card)>[class*="col-"]{
+    padding-left:12px;padding-right:12px;
+  }
+}
 
 /* ===== 13) GRADIENT OVERLAYS ===== */
 .gradient-red:before,.gradient-orange:before,.gradient-blue:before,.gradient-green:before{content:" ";position:absolute;inset:0;z-index:1;opacity:.6;transition:.4s}
@@ -160,6 +191,7 @@ a.card.list-item.card-teams:hover .card-body-content,a.card.list-item.card-servi
 .counter.green{color:#85dc38}.counter.red{color:#ff4200}.counter.yellow{color:#ffba00}.team-chart.front-end .counter{color:#158693}.team-chart .counter-subtitle{color:#6b6b6b}
 
 /* ===== 16) FOOTER ===== */
+
 footer{background:#F7F8F7;padding:60px 0 30px;color:#444;font-size:12px;position:relative}
 footer img{position:absolute;bottom:0;width:100%}footer h2{font-weight:800!important;color:#444}footer p{font-size:14px}
 footer nav a{display:block;padding:5px 0;transition:.3s;color:#444;font-weight:500}footer nav a:hover{color:var(--tq-red)}
@@ -172,11 +204,20 @@ footer .copyright-label{font-weight:500;color:#444}
 /* Footer heading tweak */
 footer .text-center h5.no-accent{font-family:var(--serif,Georgia,"Times New Roman",serif);font-weight:700;font-size:clamp(20px,2.2vw,24px);margin-bottom:.5rem}
 
+
+/* SOCIAL ICONS */
+.social-icons{display:flex;gap:2px;margin-top:4px}
+.social-icons .si{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;color:#5b6570;transition:.2s}
+.social-icons .si:hover{color:#CE3531;opacity:.9}
+.social-icons .icon{width:28px;height:28px;display:block;background:currentColor;-webkit-mask:var(--icon) no-repeat center/contain;mask:var(--icon) no-repeat center/contain;-webkit-mask-mode:alpha;mask-mode:alpha}
+@media(max-width:480px){.social-icons .si{width:28px;height:28px}.social-icons .icon{width:18px;height:18px}}
+
+
 /* ===== 17) NEWS / SIDEBAR ===== */
 .card-news{background:#fff}.card-news h3{font-weight:500!important;margin-bottom:2px;font-size:20px;line-height:1.4;color:#444}
 .card-news p{font-size:15px;color:#444;overflow:hidden;text-overflow:ellipsis;display:none;-webkit-line-clamp:4;-webkit-box-orient:vertical}
 .card-news .card-body{padding:16px 0}.card-news .card-body .post-date{font-weight:500}
-.post-date{display:block;color:#444444cc}.post-date i{margin:0 5px;color:#bf3134}.post-date i:first-child{margin-left:0}
+.post-date{display:block;color:#444444cc}.post-date i{margin:0 5px;color:var(--tq-red)}.post-date i:first-child{margin-left:0}
 
 /* ===== 18) FORMS ===== */
 .form-control:focus{box-shadow:0 0 0 .2rem rgb(21 134 147 /.25);border-color:#158693}
@@ -253,8 +294,12 @@ img.size-full{max-width:100%!important;height:auto!important;width:auto!importan
 
 /* ===== 23) CAREERS (Workable embed + CTA) ===== */
 .page-template-page-careers .page-content,.page-id-XXX .page-content{max-width:100%;margin:0 auto;padding:24px 16px}
-.wp-block-columns{display:flex;flex-wrap:wrap;gap:24px;margin:24px 0}.wp-block-column{flex:1 1 100%}
-@media(min-width:768px){.wp-block-column[style*="flex-basis"]{flex:0 0 auto}}
+.wp-block-columns{display:flex;gap:24px;margin:24px 0}
+.wp-block-column{flex:1 1 0}     /* allow side-by-side */
+
+@media(min-width:768px){
+  .wp-block-columns{flex-wrap:wrap}
+  .wp-block-column{flex:1 1 100%} /* stack only on mobile */}
 .aligncenter{display:block;margin:0 auto}.wp-block-image img{max-width:100%;height:auto;border-radius:12px}
 .section-title{font-family:Inter,ui-sans-serif,system-ui;font-weight:700;color:var(--ink);margin:8px 0 12px}
 .wp-block-heading a{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent}.wp-block-heading a:hover{color:#1a73e8;border-bottom-color:#1a73e8}
@@ -400,3 +445,17 @@ img.size-full{max-width:100%!important;height:auto!important;width:auto!importan
 @media (prefers-reduced-motion:reduce){
   .hamburger-inner,.hamburger-inner::before,.hamburger-inner::after{transition:none}
 }
+
+/* Make WP YouTube embeds truly responsive (fix 500×281) */
+.wp-embed-aspect-16-9 .wp-block-embed__wrapper{position:relative;height:0;padding-bottom:56.25%}
+.wp-embed-aspect-16-9 .wp-block-embed__wrapper>iframe,
+.wp-embed-aspect-16-9 .wp-block-embed__wrapper>embed,
+.wp-embed-aspect-16-9 .wp-block-embed__wrapper>object{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
+
+/* Safety: if the plugin injects an iframe without the wrapper */
+.hd-bcve-wrapper iframe{aspect-ratio:16/9;width:100%!important;height:auto!important;display:block}
+
+/* Thumbnail stays contained like Careers */
+.hd-bcve-thumbnail{width:100%;height:auto;display:block}
+figure.wp-block-image.hd-bcve-wrapper{margin-bottom:0}
+
