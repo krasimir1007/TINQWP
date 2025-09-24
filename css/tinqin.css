@@ -16,6 +16,7 @@ h2.section-title.sidebar-title{color:#444;padding-left:25px;font-size:20px;line-
 h2.section-title.sidebar-title::before{height:15px;width:15px;top:2px;left:0}
 .text-right h2.section-title{padding-left:0;padding-right:35px}
 .text-right h2.section-title::before{left:auto;right:0}
+h4 {font-weight:700!important;}
 
 /* Gutenberg centered headings */
 h1.wp-block-heading.has-text-align-center{text-align:center;font-size:2.5em;font-weight:800;margin:20px 0}
@@ -90,7 +91,7 @@ a:hover,a:active{color:#5f110c;text-decoration:none}
 
 
 /* ==== Unified boxes (BG/FR/EN) — works for both patterns ==== */
-.accent-box,.client-box{background:none}
+.accent-box,.client-box{background:none;}
 .tq-benefits--dark,.accent-box,.client-box{color:#f8fafc;border-radius:12px}
 .tq-benefits--dark .section-title,.tq-benefits--dark .benefits-label,
 .accent-box .section-title,.client-box .section-title{color:#f8fafc}
@@ -104,7 +105,13 @@ a:hover,a:active{color:#5f110c;text-decoration:none}
 .client-box>.container{background:#454f5f;border-radius:12px;padding:32px 16px}
 .tq-benefits .row{row-gap:16px}
 .tq-benefits img{width:clamp(56px,8vw,80px);height:auto}
-
+/* Dark container */
+:where(.wp-block-group).tq-benefits--dark.has-background {
+  background-color: #454f5f;
+  color: #e6edf3;
+  border-radius: 16px;
+  padding: 0 1rem;
+}
 
 /* ===== 12) CARDS — fix empty services cards + keep old hover only for generic cards ===== */
 

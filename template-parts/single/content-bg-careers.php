@@ -22,10 +22,7 @@ add_filter( 'the_content', 'tinqin_wrap_iframes_in_responsive_div' );
   <div class="row">
     <div class="col-12">
       <h1 class="section-title"><?php the_title(); ?></h1>
-	  <h2 class="section-title">Отворени позиции</h2>
-      <div class="page-content">
         <?php the_content(); ?>
-      </div>
     </div>
   </div>
 </div>
@@ -45,7 +42,7 @@ $career_news = new WP_Query(array(
 ));
 
 if ( $career_news->have_posts() ) : ?>
-  <div class="container mt-5 container-nopad">
+  <div class="container mt-2 container-nopad">
     <div class="row">
       <div class="col-12">
         <h2 class="section-title">Кариерни Новини</h2>
