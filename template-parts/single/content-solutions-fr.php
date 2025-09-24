@@ -1,0 +1,351 @@
+<?php
+// Template Name: Solutions Hero FR
+$lang = function_exists('pll_current_language') ? pll_current_language() : '';
+get_header();
+
+?>
+<style id="home-hero">
+/* === TINQIN Sol Hero (Arial, compact) === */
+.sol-hero{
+  --font:Arial,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --ink:#121417;--muted:#5b6570;--bg:#fff;--red:#CE3531;--h1-gray:#8b95a4;--stroke:6;
+  background:var(--bg);padding:20px 0;font-family:var(--font)
+}
+.sol-hero>.container>h1{
+  margin:0 0 1rem;color:var(--h1-gray);
+  font-size:4rem;line-height:1.18;font-weight:900; /* visible, not ultra-bold */
+  letter-spacing:-.01em;max-width:38ch
+}
+.sol-grid{display:grid;gap:20px;align-items:start;max-width:1140px;margin:0 auto;grid-template-columns:1fr 2fr}
+@media(min-width:992px){.sol-grid{grid-template-columns:1fr 1fr;gap:28px}}
+.sol-copy h2{margin:0 0 10px;color:var(--ink);font-size:1.3rem;font-weight:600;line-height:1.3;max-width:60ch}
+.sol-copy ul{margin:10px 0 14px;padding-left:1.1rem;color:var(--ink);font-size:1rem;line-height:1.25;}
+.sol-hero .wp-block-list {list-style-type:"+ ";}
+.sol-copy li {font-weight:600!important;}
+.sol-copy li+li{margin-top:6px}.sol-copy li strong{color:var(--red)}
+.wp-block-buttons{display:flex;flex-wrap:wrap;gap:12px 20px;margin:0}
+.wp-block-button .wp-block-button__link{padding:.7rem 1.2rem;border-radius:9999px;font:600 15px/1 var(--font);transition:.15s}
+.wp-block-button:not(.is-style-outline) .wp-block-button__link{background:#f3f4f6;color:var(--ink);border:2px solid var(--red)}
+.wp-block-button:not(.is-style-outline) .wp-block-button__link:hover{background:var(--red);color:#fff}
+.wp-block-button.is-style-outline .wp-block-button__link{background:#fff;border:1px solid #d6dbe1;color:var(--ink)}
+.wp-block-button.is-style-outline .wp-block-button__link:hover{border-color:#c6ccd5}
+
+@media(max-width:680px){
+  .sol-hero>.container>h1{max-width:22ch;margin-inline:auto;text-align:center;font-size:2rem;}
+  .sol-copy,.sol-copy *{text-align:center}
+  .wp-block-buttons{justify-content:center;flex-wrap:nowrap}
+  .wp-block-button .wp-block-button__link{font-size:14px;white-space:nowrap}
+}
+
+/* === CICD Infinity Animation (framed, gradient restored) === */
+.cicd-wrap{
+  --ink:#121417;--red:#CE3531;--accent:#1a73e8;
+  --dur:6s;--stroke:22;--dot:18;
+  width:100%;max-width:550px;margin:0 auto;
+  background:#f9f9fa;
+  border:1px solid #e5e7eb;border-radius:8px;
+  padding:0;}
+  
+.cicd-wrap svg{display:block;width:100%;height:auto}
+@media(max-width:768px){.cicd-wrap{max-width:none}}
+
+/* Infinity loop path (gradient) */
+.cicd-wrap path:first-of-type{
+  stroke:url(#cicd-grad);stroke-width:var(--stroke);
+  fill:none;stroke-linecap:round;stroke-linejoin:round
+}
+
+/* Moving dots */
+.cicd-tracer{
+  stroke:#fff;stroke-width:var(--dot);stroke-linecap:round;fill:none;
+  stroke-dasharray:.04 1;
+  animation:cicd-orbit var(--dur) linear infinite,cicd-fade-h var(--dur) linear infinite;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))
+}
+.cicd-tracer.t2{animation-delay:calc(-1*var(--dur)/3),calc(-1*var(--dur)/3)}
+.cicd-tracer.t3{animation-delay:calc(-2*var(--dur)/3),calc(-2*var(--dur)/3)}
+@keyframes cicd-orbit{to{stroke-dashoffset:-1}}
+@keyframes cicd-fade-h{0%,50%,100%{opacity:1}25%{opacity:0}40%{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.cicd-tracer{animation:none;opacity:1}}
+
+.cicd-label{
+  margin-top:.5rem;text-align:center;
+  font:14px/1.3 Arial,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,sans-serif;
+  color:var(--ink)
+}
+
+/* === CICD hit-zones — fix “12px short” + split logic ===
+   Root cause: using `inset:0` on .cicd-hit, then overriding with `width:50%`
+   left/right created conflicting constraints. Also label margin added extra height.
+   This version pins top/bottom and uses left/right halves without width. */
+
+.cicd-wrap{ position: relative; }
+
+/* Full-height overlay plane (stack above SVG, below label text) */
+.cicd-hit{
+  position:absolute;
+  top:0;            /* cover full card height, incl. label area */
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:2;
+  background:transparent;
+  pointer-events:auto;
+  mix-blend-mode:multiply;
+  transition:background-color .2s ease, box-shadow .2s ease;
+}
+
+/* Exact halves (no width property; split by edges) */
+.cicd-hit.hit-left  { right:50%; }  /* left half */
+.cicd-hit.hit-right { left:50%;  }  /* right half */
+
+/* Optional: respect the wrap’s horizontal padding (0 4px)
+   Uncomment if you do NOT want tint under the 4px gutters.
+   .cicd-hit{ left:4px; right:4px; }
+   .cicd-hit.hit-left{  right:calc(50% + 4px); }
+   .cicd-hit.hit-right{ left: calc(50% + 4px); }
+*/
+
+/* Hover tints */
+.cicd-wrap:has(.hit-left:hover)  .hit-left{
+  background:rgba(206,53,49,.10);
+  box-shadow:inset 0 0 0 1px rgba(206,53,49,.18);
+}
+.cicd-wrap:has(.hit-right:hover) .hit-right{
+  background:rgba(26,115,232,.10);
+  box-shadow:inset 0 0 0 1px rgba(26,115,232,.18);
+}
+
+/* Label: remove margin and keep it above the overlay plane */
+.cicd-label{
+  margin-top:0;               /* was .5rem → could visually “extend” card below hits */
+  position:relative;
+  z-index:3;                  /* keep text above tint */
+  display:flex; justify-content:center; align-items:center;
+  font:14px/1.3 Arial,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,sans-serif;
+  color:#121417;
+}
+.cicd-label span{display:none; flex:1}
+.cicd-label .label-default{display:block; text-align:center}
+.cicd-wrap:has(.hit-left:hover)  .label-default,
+.cicd-wrap:has(.hit-right:hover) .label-default{display:none}
+.cicd-wrap:has(.hit-left:hover)  .label-left {display:block; text-align:left;  padding-left:4px;  color:#CE3531; font-weight:400}
+.cicd-wrap:has(.hit-right:hover) .label-right{display:block; text-align:right; padding-right:4px; color:#1a73e8; font-weight:400}
+
+
+
+/* Don’t scale inline label arrows */
+.cicd-label svg {
+  width: 1em !important;   /* scale with font size */
+  height: 1em !important;
+  display: inline-block !important;
+  vertical-align: -0.125em;
+}
+
+
+/* === Mobile grid fix for Sol Hero === */
+
+/* Stack columns on phones, give SVG full-width card */
+@media (max-width: 768px){
+  .sol-grid{grid-template-columns:1fr; gap:16px}
+
+  /* Buttons: full-width, easy tap */
+  .wp-block-buttons{flex-direction:column;align-items:stretch;gap:10px}
+  .wp-block-button .wp-block-button__link{width:100%}
+
+  /* CI/CD card scales up on mobile */
+  .cicd-wrap{
+    max-width:100%;
+    margin-inline:auto;
+    padding:12px;                 /* keep the frame spacing */
+    border-radius:8px;            /* from previous framed style */
+  }
+  .cicd-wrap svg{width:100%;height:auto;aspect-ratio:11/6}
+}
+
+/* Tablet: give copy a bit more room (2:1 split) */
+@media (min-width: 769px) and (max-width: 991.98px){
+  .sol-grid{grid-template-columns:2fr 1fr; gap:24px}
+  .cicd-wrap{max-width:520px;margin-left:auto}
+}
+
+/* Fixes*/
+
+
+
+.sol-hero .wp-block-buttons{display:flex;gap:12px 20px;flex-wrap:wrap;margin:1.5rem 0;}
+.sol-hero .wp-block-button .wp-block-button__link{padding:.78rem 1.25rem;border-radius:9999px;font-weight:600;font-size:16px;line-height:1;transition:background-color .15s,border-color .15s,color .15s,box-shadow .15s;box-shadow:none;}
+.sol-hero .wp-block-button:not(.is-style-outline) .wp-block-button__link{background:#f3f4f6;color:#121417;border:2px solid #CC2B25;}
+.sol-hero .wp-block-button:not(.is-style-outline) .wp-block-button__link:hover{background:#CC2B25;border-color:#CC2B25;color:#fff;}
+.sol-hero .wp-block-button.is-style-outline .wp-block-button__link{background:#fff;border:1px solid #d6dbe1;color:#121417;}
+.sol-hero .wp-block-button.is-style-outline .wp-block-button__link:hover{border-color:#c6ccd5;background:#fff;}
+
+</style>
+
+<section class="sol-hero">
+  <div class="container mb-lg-5 mb-3">
+  <h1><?php the_title(); ?></h1>
+
+    <div class="sol-grid">
+      <div class="sol-copy">
+        <?php the_content(); ?>
+      </div>
+		<!-- CI/CD Infinity animation -->
+		<div class="cicd-wrap" aria-label="CI/CD animation">
+			  <!-- Tight box: minimal whitespace (extremes near edges). viewBox 0 0 720 500; path peaks ~x:20/700, y:20/480 -->
+			<svg class="cicd-svg" viewBox="0 0 720 360" width="720" height="360" preserveAspectRatio="xMidYMin meet" role="img" aria-labelledby="cicdTitle cicdDesc">
+			<title id="cicdTitle">CI/CD infinity animation</title>
+				<desc id="cicdDesc">Three dots orbit an infinity symbol; dots fade at left and right extremes to suggest feedback flowing from production back to integration.</desc>
+
+				<defs>
+				  <linearGradient id="cicd-grad" x1="0" y1="0" x2="720" y2="360" gradientUnits="userSpaceOnUse">
+					<stop offset="0"   stop-color="var(--red)"/>
+					<stop offset=".55" stop-color="var(--ink)"/>
+					<stop offset="1"   stop-color="var(--accent)"/>
+				  </linearGradient>
+				</defs>
+
+					<!-- === Infinity path + tracers — SAME geometry (720×360), ordered UR → DR → UL → DL === -->
+
+					<!-- Ribbon -->
+					<path id="cicd-loop" d="M360,180
+					  C480,0 705,0 705,180
+					  C705,360 480,360 360,180
+					  C240,0 15,0 15,180
+					  C15,360 240,360 360,180"
+					  fill="none"
+					  stroke="url(#cicd-grad)"
+					  stroke-width="var(--stroke)"
+					  stroke-linecap="round"
+					  stroke-linejoin="round"/>
+
+					<!-- Tracers (explicit, no <use>) -->
+					<path class="cicd-tracer"  pathLength="1" stroke-dasharray=".04 3" fill="none"
+					  stroke="rgba(255,255,255,.85)" stroke-width="var(--dot,12)" stroke-linecap="round" stroke-linejoin="round"
+					  d="M360,180
+					  C480,0 705,0 705,180
+					  C705,360 480,360 360,180
+					  C240,0 15,0 15,180
+					  C15,360 240,360 360,180"/>
+
+					<path class="cicd-tracer t2" pathLength="1" stroke-dasharray=".04 1" fill="none"
+					  stroke="rgba(255,255,255,.75)" stroke-width="var(--dot,12)" stroke-linecap="round" stroke-linejoin="round"
+					  d="M360,180
+					  C480,0 705,0 705,180
+					  C705,360 480,360 360,180
+					  C240,0 15,0 15,180
+					  C15,360 240,360 360,180"/>
+
+					<path class="cicd-tracer t3" pathLength="1" stroke-dasharray=".04 .3" fill="none"
+					  stroke="rgba(255,255,255,.6)" stroke-width="var(--dot,12)" stroke-linecap="round" stroke-linejoin="round"
+					  d="M360,180
+					  C480,0 705,0 705,180
+					  C705,360 480,360 360,180
+					  C240,0 15,0 15,180
+					  C15,360 240,360 360,180"/>
+				<!-- Connector line to caption (just below center to avoid overlap) -->
+				<line x1="360" y1="20" x2="360" y2="120" stroke="var(--ink)" stroke-width="1"/>
+				<line x1="360" y1="240" x2="360" y2="360" stroke="var(--ink)" stroke-width="1"/>
+
+			  </svg>
+
+				  <!-- Invisible hit areas over the SVG -->
+				  <div class="cicd-hit hit-left"  aria-label="TINQIN pipeline"></div>
+				  <div class="cicd-hit hit-right" aria-label="Customer environment"></div>
+
+				<div class="cicd-label">
+				
+				  <span class="label-default">
+					<!-- Left triangle -->
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"
+						 width="1em" height="1em" style="vertical-align:-0.15em;margin-right:.35em">
+					  <polygon points="10,0 0,5 10,10" fill="currentColor"/>
+					</svg>
+					<strong>SYNCED CI|CD LOOPS&nbsp;</strong>
+					<!-- Right triangle -->
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"
+						 width="1em" height="1em" style="vertical-align:-0.15em;margin-left:.35em">
+					  <polygon points="0,0 10,5 0,10" fill="currentColor"/>
+					</svg>
+					<br/>Regular Releases &raquo; Unified Codebase<br>Automated Tests &laquo; QA and Security
+				  </span>
+
+				  <span class="label-left">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"
+						 width="1em" height="1em" style="vertical-align:-0.15em;margin-right:.35em">
+					  <polygon points="10,0 0,5 10,10" fill="currentColor"/>
+					</svg>
+					<strong>TINQIN LOOP</strong><br>DevSecOps Pipeline<br>Execution & Delivery
+				  </span>
+
+				  <span class="label-right">
+					<strong>CLIENT LOOP</strong>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"
+						 width="1em" height="1em" style="vertical-align:-0.15em;margin-left:.35em">
+					  <polygon points="0,0 10,5 0,10" fill="currentColor"/>
+					</svg>
+					<br/>Production Pipeline<br>Validation & Discovery
+				  </span>
+				</div>
+				
+				</div>
+			</div>
+			</div>
+		  </div>
+
+</section>
+
+
+<!-- ===================== HOW IT WORKS (WITH VIDEO) — DROP-IN USING PLUGIN MARKUP ===================== -->
+<style>
+.section-video{background:#121417;color:#fff;padding:28px 0;font-family:Arial,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,sans-serif}
+.section-video h2{font-weight:800;font-size:1.375rem;line-height:1.2;margin:0 0 14px}
+.video-container{box-sizing:border-box;width:100%;max-width:1100px;margin:0 auto;padding:0}
+.section-video .grid{display:grid;grid-template-columns:1fr;gap:18px}
+.section-video .copy{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px}
+.section-video .copy p{color:#f4f6f8;margin:0 0 12px}
+.section-video .copy .lead{font-size:1.05rem;font-weight:700;color:#fff}
+.video-card {background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px}
+
+/* ≥768px: strict 1fr / 1fr halves */
+@media (min-width:768px){
+  .section-video h2{font-size:1.5rem}
+  .section-video .grid{grid-template-columns:1fr 1fr;gap:24px}
+}
+figure.video-card {margin-bottom:0!important}
+</style>
+
+<section class="section-video" aria-labelledby="how-title">
+  <div class="video-container">
+    <h2 id="how-title">How it works</h2>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="copy">
+        <p class="lead">Problem → Complex change of legacy systems.</p>
+        <p><strong>Approach →</strong> An agile, senior team runs an R&amp;D sprint with pre-built accelerators. We quickly prove value against a tightly scoped user journey.</p>
+        <p><strong>Value →</strong> In weeks, you have a secure PoC in production-like conditions, clear metrics, and a path to scale without lock-in.</p>
+        <div class="cta-row">
+          <a class="tq-btn" href="<?php echo esc_url( site_url('/consultation') ); ?>">Start your proof of concept</a>
+          <span class="cta-note">Typical PoC: 2–4 weeks, joint team, measurable KPIs.</span>
+        </div>
+      </div>
+
+      <div id="why" >
+		<?php
+		// Slug of the child page that holds only the YouTube block
+		$video_page = get_page_by_path('solutions-video-cta'); 
+		if ($video_page) {
+		  $orig_post = $post; 
+		  $post = $video_page; setup_postdata($post);
+		  echo '<div class="video-card">'; 
+		  the_content();            // plugin sees this and swaps to click-to-play
+		  echo '</div>';
+		  wp_reset_postdata();
+		  $post = $orig_post;
+		}
+		?>
+		</div>
+    </div>
+  </div>
+</section>

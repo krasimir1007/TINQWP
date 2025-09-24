@@ -10,7 +10,7 @@ get_header();
 .sol-hero{--tq-font:Arial,"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,sans-serif;--ink:#121417;--muted:#5b6570;--bg:#fff;--red:#CE3531;--h1-gray:#8b95a4;background:var(--bg);padding:20px 0;font-family:var(--tq-font)}
 .sol-hero>.container>h1{margin:0 0 1rem!important;color:var(--h1-gray);font:800 3.7rem/1 var(--tq-font);letter-spacing:-.01em;max-width:38ch}
 .sol-grid{display:grid;gap:20px;align-items:start;max-width:1140px;margin:0 auto;grid-template-columns:1fr}
-@media(min-width:992px){.sol-grid{grid-template-columns:1fr 1fr;gap:12px}}
+@media(min-width:992px){.sol-grid{grid-template-columns:1.15fr 1fr;gap:28px}}
 .sol-copy h2{margin:0 0 10px;color:var(--ink);font:600 1.3rem/1.3 var(--tq-font);max-width:60ch}
 .sol-copy ul{margin:10px 0 18px;padding-left:1rem;color:var(--ink)}
 .sol-copy ul li {line-height:1.25!important;font-size:1rem;}
@@ -28,13 +28,13 @@ get_header();
   .sol-hero>.container>h1{max-width:22ch;margin-inline:auto;text-align:center;font-size:2rem}
   .sol-copy h2,.sol-copy .wp-block-buttons{text-align:center}
   .wp-block-buttons{justify-content:center;flex-wrap:nowrap;margin-bottom:1rem;}
-  .wp-block-button .wp-block-button__link{font-size:1rem;white-space:nowrap}
+  .wp-block-button .wp-block-button__link{font-size:14px;white-space:nowrap}
   .sol-copy ul,.sol-copy li{max-width:none;margin:0;text-align:left}
   .sol-copy .wp-block-list{margin:0 0 2rem;padding-left:1rem;list-style-position:outside} /* ← spacing fix */
 }
 
 /* CTA alignment */
-@media(min-width:992px){.sol-grid{align-items:stretch}.sol-copy{display:flex;flex-direction:column;height:calc(100% - 10px);padding-bottom:12px}.sol-copy .wp-block-buttons{margin-top:auto;margin-bottom:0}}
+@media(min-width:992px){.sol-grid{align-items:stretch}.sol-copy{display:flex;flex-direction:column;height:100%;padding-bottom:12px}.sol-copy .wp-block-buttons{margin-top:auto;margin-bottom:0}}
 @media(max-width:991px){.sol-grid{align-items:start}.sol-copy{display:block}.sol-copy .wp-block-buttons{margin-top:1rem}}
 
 
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <section class="sol-hero">
-  <div class="container mb-lg-3 mb-2">
+  <div class="container mb-lg-5 mb-3">
   <h1><?php the_title(); ?></h1>
 
     <div class="sol-grid">
@@ -172,11 +172,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 /* Let Gutenberg handle columns (flex). Only tighten spacing & cards */
 .section-video .wp-block-columns{gap:18px;margin:0}
-.section-video .wp-block-column.copy{display:flex;flex-direction:column;gap:12px;padding:0}
+.section-video .wp-block-column.copy{display:flex;flex-direction:column;gap:12px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
 .section-video .wp-block-column.copy p{margin:0;color:var(--muted)}
 .section-video .wp-block-column.copy .lead{font-weight:700;color:var(--ink)}
 .section-video .trust-media{margin-top:auto}
 .section-video .trust-media img{display:block;width:100%;height:auto;border-radius:8px}
+
 
 /* Logos strip in left column — flexible, full width on mobile, ~500px on desktop */
 .section-video .copy{display:flex;flex-direction:column}
@@ -184,29 +185,30 @@ document.addEventListener('DOMContentLoaded',()=>{
 .section-video figure.transmedia{margin-top:auto;width:100%;max-width:clamp(280px,50vw,500px)}
 .section-video figure.trust-media img,
 .section-video figure.transmedia img{display:block;width:100%;height:auto;border-radius:8px}
+```
+```css
+/* Logos strip in left column — flexible, full width on mobile, ~500px on desktop */
+.section-video .copy{display:flex;flex-direction:column}
+.section-video figure.trust-media,
+.section-video figure.transmedia{margin-top:auto;width:100%;max-width:clamp(280px,50vw,500px)}
+.section-video figure.trust-media img,
+.section-video figure.transmedia img{display:block;width:100%;height:auto;border-radius:8px}
+```
 
 
 /* Video card */
 .section-video .wp-block-column.video>figure{margin:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
 .section-video .hd-bcve-thumbnail{display:block;width:100%;height:auto}
 
-/* Fixes for media blocks inside the two columns */
-.wp-block-column .trust-media,
-.wp-block-column .hd-bcve-wrapper{margin:0;padding:0;display:block}
-.trust-media picture,.trust-media img{display:block;max-width:100%;height:auto}
-/* Optional: cap logos ~500px on desktop, full width on mobile */
-.trust-media{width:100%}
-@media(min-width:992px){.trust-media{width:min(100%,500px)}}
 @media(min-width:768px){
   .section-video h2{font-size:1.5rem}
   .section-video .wp-block-columns{gap:24px} /* keep 2-cols as WP renders them */
 }
-
 </style>
 
 <section class="section-video" aria-labelledby="how-title">
   <div class="container"><!-- align with hero/container -->
-    <h2 id="how-title" class="section-title">Customer Milestone: Helping Unéo onboard 400,000+ end-users in just 4 months</h2>
+    <h2 id="how-title" class="section-title">See Why it Works</h2>
     <?php
       // Child page holds Gutenberg Columns: left .copy, right .video
       if ($video_page = get_page_by_path('solutions-video-cta')) {

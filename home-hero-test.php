@@ -23,10 +23,10 @@ get_header();
 /* Left column */
 .home-hero .hero-copy{max-width:720px;text-align:left;}
 .home-hero .hero-copy h1,
-.home-hero .hero-copy h1.hero-h1{font-family:Inter,ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial;font-weight:800;letter-spacing:-.02em;line-height:1.18;margin:0 0 10px;font-size:clamp(32px,4vw,50px) !important;max-width:20ch;color:var(--h1-gray);}
+.home-hero .hero-copy h1.hero-h1{font-family:Inter,ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial;font-weight:800;letter-spacing:-.02em;line-height:1.18;margin:0 0 10px;font-size:clamp(30px,4vw,50px) !important;max-width:20ch;color:var(--h1-gray);}
 .home-hero .hero-copy h1 mark{background:transparent;color:#54d38e;padding:0;margin:0;border:0;border-radius:0;line-height:inherit;box-shadow:none;text-decoration:none;}
 @media(max-width:680px){.home-hero .hero-copy,.home-hero .hero-copy *{text-align:center;} .home-hero .hero-copy h1,.home-hero .hero-copy h1.hero-h1{max-width:18ch;margin:0 auto 12px;}}
-.home-hero .hero-copy h2{font-weight:600;color:var(--ink);opacity:.95;font-size:clamp(18px,2.1vw,24px);line-height:1.33;margin:0 0 12px;max-width:32ch;}
+.home-hero .hero-copy h2{font-weight:600;color:var(--ink);opacity:.95;font-size:clamp(18px,2.1vw,24px);line-height:1.33;margin:0 0 12px;max-width:45ch;}
 .home-hero .hero-copy p:first-of-type{color:var(--muted);font-size:clamp(16px,1.6vw,18px);line-height:1.6;max-width:60ch;margin:0 0 24px;}
 
 /* Promo banner */
@@ -99,7 +99,7 @@ get_header();
 
 /* Terminal */
 .tq-term{display:grid;grid-template-rows:var(--tb) 1fr;background:#0f1117;height:100%;border-radius:8px;overflow:hidden;font-family:var(--mono);color:#e6edf3;}
-.tq-titlebar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #1f2430;background:#141821;height:var(--tb);}
+.tq-titlebar{display:flex;align-items:center;gap:8px;margin-top:6px!important;padding:8px 12px;border-bottom:1px solid #1f2430;background:#141821;height:var(--tb);}
 .tq-dot{width:10px;height:10px;border-radius:2px;background:#3a4250}.tq-red{background:#ae2f37;}
 .tq-fn{margin-left:6px;font:12px/1 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:#c9d4e3;}
 .tq-out{margin:0;padding:14px 16px;box-sizing:border-box;overflow:auto;color:#e6e9ef;background:#0f1117;font:14px/1.5 var(--mono);white-space:pre-wrap;tab-size:2;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;width:100%;max-width:none;overflow-wrap:anywhere;}
@@ -379,7 +379,7 @@ get_header();
 
 
   <!-- Client random post -->
-  <div class="client-box tq-benefits--dark pt-5 pb-5" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>	  
+  <div class="container tq-benefits tq-benefits--dark pt-5 pb-5" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>	  
 	  <div id="testimonialCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
 		  <div class="carousel-inner"> 
 			  <?php $i = 0; foreach ( $testimonials as $testimonal ) { ?>
@@ -414,34 +414,29 @@ get_header();
 
   ?> 
 
-
+</div> 
 <?php get_footer(); ?>
 
 
 <script>
 window.addEventListener('DOMContentLoaded', () => {
-  const out = document.getElementById('tq-term-out');
-  if (!out) return;
+  const out = document.getElementById('tq-term-out'); if (!out) return;
 
-  // Speed knobs
-  const TYPE_MS = 10;          // per char (lower = faster)
-  const LINE_GAP = 380;        // between lines
-  const EMPTY_DELAY = 1200;    // extra wait for blank lines
-  const START_DELAY = 3000;    // 3s before typing starts
+  const TYPE_MS=10, LINE_GAP=380, EMPTY_DELAY=1200, START_DELAY=3000;
 
-  const LINES_DESKTOP = [
+  const LINES_DESKTOP=[
     "$ deploy.TINQIN_customApp.sh",
     "+ git pull --rebase && npm ci && npm test",
     "Already up to date.",
     "342 tests passed (3.2s)",
+	"+ npm run qa:e2e --silent",
+	"Automated QA: 9 smoke flows passed · LCP 2.1s",
     "+ trivy fs . --sev HIGH,CRIT -q --exit-code 1",
     "No vulnerabilities found",
-    "",
     "+ TAG=$(git rev-parse --short HEAD) && echo $TAG",
     "91ab23c",
     "+ docker build -t ghcr.io/tinqin/tqweb:91ab23c .",
     "Successfully built 91ab23c",
-    "",
     "+ docker push ghcr.io/tinqin/tqweb:91ab23c",
     "Pushed ghcr.io/tinqin/tqweb:91ab23c",
     "+ helm upgrade --install tqweb charts/tqweb -n",
@@ -450,8 +445,7 @@ window.addEventListener('DOMContentLoaded', () => {
     "+ kubectl rollout status deploy/tqweb -n staging",
     "Deployment \"tqweb\" successfully rolled out",
   ];
-
-  const LINES_MOBILE = [
+  const LINES_MOBILE=[
     "$ deploy.TINQIN_customApp.sh",
     "+ git pull --rebase && npm ci && npm test",
     "Already up to date.",
@@ -470,117 +464,58 @@ window.addEventListener('DOMContentLoaded', () => {
     "+ kubectl rollout status deploy/tqweb -n staging",
     "Deployment \"tqweb\" successfully rolled out",
   ];
+  const LINES = matchMedia('(max-width:680px)').matches ? LINES_MOBILE : LINES_DESKTOP;
 
-  const LINES = window.matchMedia('(max-width:680px)').matches ? LINES_MOBILE : LINES_DESKTOP;
+  // cursor lives during typing only
+  const cursor = document.createElement('span'); cursor.className='tq-cursor'; out.appendChild(cursor);
 
-  // Red brand cursor
-  const cursor = document.createElement('span');
-  cursor.className = 'tq-cursor';
-  out.appendChild(cursor);
-
-  // Split into parts with classes:
-  // 1) ok words, 2) variables like $TAG, 3) shell comments, 4) the 'echo' command
-  function splitParts(text) {
-    const esc = text; // no HTML escaping in this snippet
-    const parts = [];
-    let lastIndex = 0;
-
-const regex = new RegExp(
-  "\\b(Successfully|successfully|upgraded|Running|Pushed|found|Already up to date|tests passed|built)\\b" +
-  "|(\\becho\\b|\\b(?:git|npm|trivy|docker|helm|kubectl)\\b)" +
-  "|(\\$[A-Za-z_][A-Za-z0-9_]*|91ab23c)" + 
-  "|((?<![A-Za-z])\\d+(?:\\.\\d+)?(?:%|ms|[smhd])?(?![A-Za-z]))" +
-  "|(#[^\\n]*)",
-  "g"
-);
-
-
-    let match;
-    while ((match = regex.exec(esc))) {
-      if (match.index > lastIndex) {
-        parts.push({ text: esc.slice(lastIndex, match.index), cls: null });
-      }
-      if (match[1]) {
-        parts.push({ text: match[1], cls: 'ok' });
-      } else if (match[2]) {
-        parts.push({ text: match[2], cls: 'cmd' }); // echo → orange
-      } else if (match[3]) {
-        parts.push({ text: match[3], cls: 'var' }); // $VARS → magenta
-      } else if (match[4]) {
-	  parts.push({ text: match[4], cls: 'num' }); // numbers (incl. 3.2s, 5m, 100%)
-	} else if (match[5]) {
-	  parts.push({ text: match[5], cls: 'cm' });  // comments
-	}
-      lastIndex = regex.lastIndex;
+  function splitParts(text){
+    const parts=[], re=new RegExp(
+      "\\b(Successfully|successfully|upgraded|Running|Pushed|found|Already up to date|tests passed|smoke flows passed|built)\\b"
+      +"|(\\becho\\b|\\b(?:git|npm|trivy|docker|helm|kubectl)\\b)"
+      +"|(\\$[A-Za-z_][A-Za-z0-9_]*|91ab23c)"
+      +"|((?<![A-Za-z])\\d+(?:\\.\\d+)?(?:%|ms|[smhd])?(?![A-Za-z]))"
+      +"|(#[^\\n]*)","g");
+    let m,last=0;
+    while((m=re.exec(text))){
+      if(m.index>last) parts.push({text:text.slice(last,m.index)});
+      if(m[1]) parts.push({text:m[1],cls:'ok'});
+      else if(m[2]) parts.push({text:m[2],cls:'cmd'});
+      else if(m[3]) parts.push({text:m[3],cls:'var'});
+      else if(m[4]) parts.push({text:m[4],cls:'num'});
+      else if(m[5]) parts.push({text:m[5],cls:'cm'});
+      last=re.lastIndex;
     }
-    if (lastIndex < esc.length) {
-      parts.push({ text: esc.slice(lastIndex), cls: null });
-    }
+    if(last<text.length) parts.push({text:text.slice(last),cls:null});
     return parts;
   }
 
-  function typeLine(original) {
-    return new Promise(resolve => {
-      const row = document.createElement('div');
-      out.insertBefore(row, cursor); // keep cursor always last
+  function typeLine(original){
+    return new Promise(resolve=>{
+      const row=document.createElement('div');
+      out.insertBefore(row,cursor); // keep cursor last during typing
 
-      // Empty line: insert &nbsp; and wait longer
-      if (original === "") {
-        row.innerHTML = "&nbsp;";
-        setTimeout(resolve, LINE_GAP + EMPTY_DELAY);
-        return;
-      }
+      if(original===""){ row.innerHTML="&nbsp;"; setTimeout(resolve,LINE_GAP+EMPTY_DELAY); return; }
 
-      let text = original;
+      let text=original;
+      if(text.startsWith('$ ')){ const p=document.createElement('span'); p.className='prompt'; p.textContent='$ '; row.appendChild(p); text=text.slice(2); }
 
-      // Handle prompt at start
-      if (text.startsWith('$ ')) {
-        const p = document.createElement('span');
-        p.className = 'prompt';
-        p.textContent = '$ ';
-        row.appendChild(p);
-        text = text.slice(2);
-      }
-
-      const parts = splitParts(text);
-      let partIndex = 0, charIndex = 0, span = null;
-
-      (function tick() {
-        if (partIndex >= parts.length) {
-          setTimeout(resolve, LINE_GAP);
-          return;
-        }
-        const part = parts[partIndex];
-        if (charIndex === 0) {
-          span = document.createElement('span');
-          if (part.cls) span.className = part.cls;
-          row.appendChild(span);
-        }
-        span.textContent += part.text[charIndex++];
-        if (charIndex < part.text.length) {
-          setTimeout(tick, TYPE_MS);
-        } else {
-          partIndex++; charIndex = 0;
-          setTimeout(tick, TYPE_MS);
-        }
+      const parts=splitParts(text); let i=0,j=0,span=null;
+      (function tick(){
+        if(i>=parts.length){ setTimeout(resolve,LINE_GAP); return; }
+        const part=parts[i];
+        if(j===0){ span=document.createElement('span'); if(part.cls) span.className=part.cls; row.appendChild(span); }
+        span.textContent += part.text[j++];
+        setTimeout(j<part.text.length ? tick : () => { i++; j=0; tick(); }, TYPE_MS);
       })();
     });
   }
 
   (async function run(){
-    await new Promise(r => setTimeout(r, START_DELAY));
-    for (const line of LINES) {
-      await typeLine(line);
-    }
+    await new Promise(r=>setTimeout(r,START_DELAY));
+    for(const line of LINES) await typeLine(line);
 
-    // realistic ending: prompt + cursor, same line
-    const row = document.createElement('div');
-    const p = document.createElement('span');
-    p.className = 'prompt';
-    p.textContent = '$ ';
-    row.appendChild(p);
-    row.appendChild(cursor); // keep cursor blinking here
-    out.appendChild(row);
+
   })();
 });
 </script>

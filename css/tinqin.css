@@ -16,8 +16,6 @@ h2.section-title.sidebar-title{color:#444;padding-left:25px;font-size:20px;line-
 h2.section-title.sidebar-title::before{height:15px;width:15px;top:2px;left:0}
 .text-right h2.section-title{padding-left:0;padding-right:35px}
 .text-right h2.section-title::before{left:auto;right:0}
-h4 {font-weight:600;font-size:1.3rem;margin:0 0 1rem}
-
 
 /* Gutenberg centered headings */
 h1.wp-block-heading.has-text-align-center{text-align:center;font-size:2.5em;font-weight:800;margin:20px 0}
@@ -106,7 +104,6 @@ a:hover,a:active{color:#5f110c;text-decoration:none}
 .client-box>.container{background:#454f5f;border-radius:12px;padding:32px 16px}
 .tq-benefits .row{row-gap:16px}
 .tq-benefits img{width:clamp(56px,8vw,80px);height:auto}
-
 
 
 /* ===== 12) CARDS — fix empty services cards + keep old hover only for generic cards ===== */

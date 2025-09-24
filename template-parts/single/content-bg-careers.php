@@ -15,25 +15,6 @@ add_filter( 'the_content', 'tinqin_wrap_iframes_in_responsive_div' );
 ?>
 
 <style>
-/* Responsive video wrapper */
-.responsive-video {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
-  overflow: hidden;
-  max-width: 100%;
-}
-
-.responsive-video iframe,
-.responsive-video object,
-.responsive-video embed {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
 
 </style>
 
@@ -41,6 +22,7 @@ add_filter( 'the_content', 'tinqin_wrap_iframes_in_responsive_div' );
   <div class="row">
     <div class="col-12">
       <h1 class="section-title"><?php the_title(); ?></h1>
+	  <h2 class="section-title">Отворени позиции</h2>
       <div class="page-content">
         <?php the_content(); ?>
       </div>
@@ -107,9 +89,9 @@ if ( $career_news->have_posts() ) : ?>
 
 <?php if ( (int) get_queried_object_id() === 216 ) : ?>
 
-<div class="accent-box tq-benefits tq-benefits--dark mt-5 pt-5 pb-5">
+<div class="container tq-benefits tq-benefits--dark mt-3 pt-2 pb-2">
 
-  <div class="container">
+
     <div class="row">
       <div class="col-12 text-center mb-4">
         <h2 class="section-title no-bullet m-0">Придобивки за екипа</h2>
@@ -141,69 +123,24 @@ if ( $career_news->have_posts() ) : ?>
         </div>
       <?php endforeach; ?>
     </div>
-  </div>
+
 </div>
 
 
 
-<!-- Careers feature rows -->
-<style>
-  .tq-vid{position:relative;width:100%;padding-top:56.25%}
-  .tq-vid iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-</style>
 
 <div class="container my-5">
-  <!-- Row 1 -->
-  <div class="row align-items-center mb-5">
-    <div class="col-lg-6 mb-3 mb-lg-0" data-aos="fade-up" data-aos-duration="800">
-      <h2 class="section-title">Защо TINQIN: Екипна работа</h2>
-      <p>В TINQIN вярваме, че успехът идва, когато работим заедно. За нас екипната работа е култура, която подхранва индивидуалния и колективния успех.</p>
-      <p>Гордеем се с отличието ни за екипна работа <em>(Teamwork)</em>, както и с третото място в класацията на
-        <a href="https://www.tinqin.com/tinqin-e-%d1%81%d1%80%d0%b5%d0%b4-%d0%bd%d0%b0%d0%b9-%d0%b1%d1%8a%d1%80%d0%b7%d0%be-%d1%80%d0%b0%d1%81%d1%82%d1%8f%d1%89%d0%b8%d1%82%d0%b5-it-%d0%ba%d0%be%d0%bc%d0%bf%d0%b0%d0%bd%d0%b8%d0%b8-%d0%b2.html">най-бързо растящите IT компании</a> в България, организирано от Forbes.</p>
-    </div>
-    <div class="col-lg-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
-      <div class="tq-vid">
-        <iframe title="TINQIN Teambuilding 2024" src="https://www.youtube.com/embed/AsMGfoXhBpM" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
 
-  <hr class="my-4">
-
-  <!-- Row 2 -->
-  <div class="row align-items-center mb-5">
-    <div class="col-lg-6 order-lg-2 mb-3 mb-lg-0" data-aos="fade-up" data-aos-duration="800">
-      <h2 class="section-title">Защо TINQIN: Иновативни продукти</h2>
-      <p>Разработваме <a href="https://www.tinqin.com/%d0%bf%d1%80%d0%be%d0%b4%d1%83%d0%ba%d1%82%d0%b8">иновативни решения</a> за водещи европейски застрахователни компании.</p>
-      <p>Един от ключовите ни продукти е <strong><a href="https://www.kipmi.com/">Kipmi</a></strong>, мобилно приложение, част от европейска платформа за дигитално доверие, електронна идентичност и сигурно подписване на документи.</p>
-    </div>
-    <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
-      <div class="tq-vid">
-        <iframe title="Kipmi - Onboarding" src="https://www.youtube.com/embed/ZFUYohK6QU4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-
-  <hr class="my-4">
-
-  <!-- Row 3 -->
-  <div class="row align-items-center mb-5">
-    <div class="col-lg-6 mb-3 mb-lg-0" data-aos="fade-up" data-aos-duration="800">
-      <h2 class="section-title">Защо TINQIN: Международни клиенти</h2>
-      <p>Все повече компании, като френския застраховател <strong><a href="https://www.groupe-uneo.fr/">Unéo</a></strong>, избират да работят с нашия център за развойна дейност или да се възползват от нашите <a href="https://www.tinqin.com/%d1%83%d1%81%d0%bb%d1%83%d0%b3%d0%b8">консултантски услуги</a>.</p>
-      <p>Партнираме си дългосрочно по сложни бизнес системи, като залагаме на качество, прозрачност и добри практики.</p>
-    </div>
-    <div class="col-lg-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
-      <div class="tq-vid">
-        <iframe title="Unéo Testimonial" src="https://www.youtube.com/embed/pSECV3sTr8s" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
+     <?php
+      // Child page holds Gutenberg Columns: left .copy, right .video
+      if ($video_page = get_page_by_path('career-videos-bg')) {
+        $orig_post = $post; $post = $video_page; setup_postdata($post);
+        the_content();                                   // no extra wrappers
+        wp_reset_postdata(); $post = $orig_post;
+      }
+    ?>
 
 
 <?php endif; ?>
 
+</div>

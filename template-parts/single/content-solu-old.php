@@ -729,6 +729,220 @@ get_header();
 
 
 
+
+<!-- ====== PROMPT TABS (RFP/RFQ/RFI) — compact + continuous red outline ====== -->
+<style>
+.section-prompts{background:#121417;color:#fff;padding:32px 16px;font-family:var(--tq-font,Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial)}
+.section-prompts h2{margin:0 0 8px;font-weight:800;font-size:1.6rem;color:#CE3531}
+.section-prompts .lead{margin:0 0 16px;color:#f3f4f6}
+.p-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.p-btn{display:inline-flex;align-items:center;padding:9px 16px;border-radius:999px;font-weight:600;text-decoration:none}
+.p-btn.primary{border:2px solid #CE3531;color:#CE3531;background:transparent}.p-btn.primary:hover{background:#CE3531;color:#fff}
+.p-btn.ghost{border:1px solid #5b6570;color:#fff}.p-btn.ghost:hover{background:#1a1f29}
+
+/* Tabs */
+.p-tabs{max-width:1100px;margin:0 auto}
+.p-tablist{display:grid;grid-template-columns:1fr;gap:8px;margin:0}
+@media(min-width:768px){.p-tablist{grid-template-columns:repeat(3,1fr)}}
+.p-tab{border:2px solid transparent;background:transparent;color:#e7ebf0;padding:14px;border-radius:8px 8px 0 0;text-align:left;cursor:pointer}
+.p-tab h3{margin:0 0 6px;font-size:1.05rem;color:#fff}
+.p-tab p{margin:0;color:#cfd6df}
+.p-tab .link{display:inline-block;margin-top:6px;color:#1a73e8;font-weight:700}
+
+/* Active tab merges with panel via border */
+.p-tab.is-active{border-color:#CE3531;border-bottom-color:transparent;position:relative;z-index:2;background:#121722}
+
+/* Panel (bottom field) */
+.p-frame{border:2px solid #CE3531;border-top:none;margin-top:-2px;border-radius:0 10px 10px 10px;padding:14px}
+.p-panel{display:none}
+.p-panel[aria-hidden="false"]{display:block}
+.p-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:992px){.p-grid{grid-template-columns:1.2fr .8fr}}
+
+/* Right guide card */
+.p-guide{background:#121722;border:1px solid #1e232b;border-radius:8px;padding:14px}
+.p-guide h4{margin:0 0 8px;font-size:1rem}
+.p-guide ul{margin:0;padding-left:18px}
+.p-guide li{margin:6px 0}
+.copy-btn{position:absolute;right:10px;top:8px;font:12px/1 var(--mono,ui-monospace,Consolas,Menlo,Monaco);color:#cfd6df;background:#1a1f29;border:1px solid #2a2f3a;border-radius:6px;padding:6px 8px;cursor:pointer}
+.copy-btn:hover{background:#232834}
+.code-badge{position:absolute;left:12px;top:10px;font:12px/1 var(--mono,ui-monospace,Consolas,Menlo,Monaco);color:#9aa3ad}
+</style>
+
+<section class="section-prompts" aria-labelledby="prompts-title">
+  <div class="p-tabs">
+    <h2 id="prompts-title">Start your rfp</h2>
+    <p class="lead">New customers get €300 in free credits to try our Insurance Platform and other EU-compliant solutions.</p>
+    <div class="p-actions">
+      <a class="p-btn primary" href="<?php echo esc_url( site_url('/consultation') ); ?>">Get started for free</a>
+      <a class="p-btn ghost" href="<?php echo esc_url( site_url('/contact') ); ?>">Contact sales</a>
+    </div>
+
+    <!-- TAB HEADERS -->
+    <div class="p-tablist" role="tablist" aria-label="Prompt types">
+      <button id="tab-rfp" class="p-tab is-active" role="tab" aria-selected="true" aria-controls="panel-rfp">
+        <h3>Standalone App Dev (RFP)</h3>
+        <p>Browse quickstarts, tutorials, or interactive walkthroughs for Insurance Platform Engine.</p>
+        <span class="link">Browse quickstarts</span>
+      </button>
+      <button id="tab-rfq" class="p-tab" role="tab" aria-selected="false" aria-controls="panel-rfq">
+        <h3>Custom Project Quote (RFQ)</h3>
+        <p>Choose a learning path, build your skills, and validate knowledge with Insurance Skills Boost.</p>
+        <span class="link">Browse learning paths</span>
+      </button>
+      <button id="tab-rfi" class="p-tab" role="tab" aria-selected="false" aria-controls="panel-rfi">
+        <h3>CI/CD Insource/Outsource (RFI)</h3>
+        <p>Learn and experiment with pre-built solution templates handpicked by our experts.</p>
+        <span class="link">Browse Jump Start Solutions</span>
+      </button>
+    </div>
+
+    <!-- TAB PANEL FRAME (continuous outline) -->
+    <div class="p-frame">
+      <!-- RFP -->
+      <div id="panel-rfp" class="p-panel" role="tabpanel" aria-labelledby="tab-rfp" aria-hidden="false">
+        <div class="p-grid">
+          <div class="p-code">
+            <div class="tq-term" role="region" aria-label="Prompt code">
+              <div class="tq-titlebar"><span class="tq-dot"></span><span class="tq-dot tq-red"></span><span class="tq-dot"></span><span class="tq-fn">prompt.json — RFP Fit Evaluator</span></div>
+              <pre class="tq-out" id="code-rfp">
+{
+  "summary": "one-paragraph, cite context lines [L#] where possible",
+  "overall_fit_0_100": 0,
+  "dimensions": {
+    "domain_expertise": 0,
+    "security_compliance": 0,
+    "delivery_model_fit": 0,
+    "stack_alignment": 0,
+    "time_budget_feasibility": 0
+  },
+  "strengths": ["…"],
+  "risks": ["…"],
+  "required_followups": ["…"],
+  "recommended_next_step": "R&D sprint / PoC / audit / workshop"
+}
+              </pre>
+            </div>
+            <span class="code-badge">json</span>
+            <button class="copy-btn" data-copy="code-rfp">Copy code</button>
+          </div>
+          <aside class="p-guide">
+            <h4>How to get the most of the prompt?</h4>
+            <ul>
+              <li>Customize the JSON keys to your context</li>
+              <li>Link to systems maps and logs</li>
+              <li>Reference your “request-for” doc, even if WIP</li>
+              <li>Add an executive summary with goals &amp; constraints</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+
+      <!-- RFQ -->
+      <div id="panel-rfq" class="p-panel" role="tabpanel" aria-labelledby="tab-rfq" aria-hidden="true">
+        <div class="p-grid">
+          <div class="p-code">
+            <div class="tq-term" role="region" aria-label="Prompt code">
+              <div class="tq-titlebar"><span class="tq-dot"></span><span class="tq-dot tq-red"></span><span class="tq-dot"></span><span class="tq-fn">prompt.txt — RFQ Cost &amp; Scope Estimator</span></div>
+              <pre class="tq-out" id="code-rfq">
+SYSTEM: EU enterprise estimator. Use only the user context. Return a concise estimate with assumptions.
+USER:
+Context:
+{{context}}
+
+Inputs:
+- target_outcome: {{outcome}}
+- current_stack: {{stack}}
+- constraints: {{constraints}}
+- timeline_weeks: {{timeline}}
+
+Task:
+1) Work-breakdown (5–8 workstreams) with key deliverables.
+2) Team mix proposal (roles, FTEs), near-shore EU.
+3) Risks &amp; mitigations; security &amp; compliance gates (ISO 27001).
+4) Budget bands (min/likely/max) with drivers.
+5) Next step recommendation (workshop/PoC/pentest).
+              </pre>
+            </div>
+            <span class="code-badge">prompt</span>
+            <button class="copy-btn" data-copy="code-rfq">Copy code</button>
+          </div>
+          <aside class="p-guide">
+            <h4>Usage tips</h4>
+            <ul>
+              <li>Paste architecture &amp; roadmap under <em>Context</em></li>
+              <li>Ask for line-item budget drivers</li>
+              <li>Request JSON output to import to Sheets</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+
+      <!-- RFI -->
+      <div id="panel-rfi" class="p-panel" role="tabpanel" aria-labelledby="tab-rfi" aria-hidden="true">
+        <div class="p-grid">
+          <div class="p-code">
+            <div class="tq-term" role="region" aria-label="Prompt code">
+              <div class="tq-titlebar"><span class="tq-dot"></span><span class="tq-dot tq-red"></span><span class="tq-dot"></span><span class="tq-fn">prompt.yaml — CI/CD Insource/Outsource Readiness</span></div>
+              <pre class="tq-out" id="code-rfi">
+intent: assess_cicd_model_fit
+inputs:
+  org: {{org}}
+  repos: {{repos}}
+  envs: {{envs}} # dev/test/stage/prod
+  controls: {{controls}} # SOC, ISO27001, GDPR
+deliver:
+  - maturity_map: DORA metrics + SDLC checkpoints
+  - build_vs_buy: pros/cons with risk &amp; cost drivers
+  - playbook: 90-day path (KPIs, gates, RACI)
+  - next_step: {type: "PoC / SOC onboarding / pentest", why: "…"}
+              </pre>
+            </div>
+            <span class="code-badge">yaml</span>
+            <button class="copy-btn" data-copy="code-rfi">Copy code</button>
+          </div>
+          <aside class="p-guide">
+            <h4>Usage tips</h4>
+            <ul>
+              <li>Provide current DORA metrics if available</li>
+              <li>State compliance scope (GDPR, ISO 27001)</li>
+              <li>Ask for split budgets for in/outsource scenarios</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* tabs + copy; keeps outline continuous */
+(function(){
+  const tabs=[...document.querySelectorAll('.p-tab')];
+  const panels=[...document.querySelectorAll('.p-panel')];
+  function show(id){
+    tabs.forEach(t=>{const on=t.id==='tab-'+id;t.classList.toggle('is-active',on);t.setAttribute('aria-selected',on)});
+    panels.forEach(p=>p.setAttribute('aria-hidden', p.id!=='panel-'+id));
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>show(t.id.replace('tab-',''))));
+
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('.copy-btn'); if(!b) return;
+    const pre=document.getElementById(b.dataset.copy);
+    navigator.clipboard.writeText(pre.innerText).then(()=>{b.textContent='Copied!';setTimeout(()=>b.textContent='Copy code',1200);});
+  });
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
 <?php
 /**
  * Paste this near the end of footer.php, right before </body>.
@@ -988,4 +1202,84 @@ get_header();
 
 
 
+
+
+
+
+<!-- ===================== HOW IT WORKS (WITH VIDEO) — DROP-IN UPDATED ===================== -->
+<style>
+:root{--ink:#121417;--muted:#5b6570;--light:#f3f4f6;--red:#CE3531}
+.section-video{background:var(--light);color:var(--ink);padding:28px 0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.section-video h2{font-weight:800;font-size:1.375rem;line-height:1.2;margin:0 0 14px}
+.video-container{box-sizing:border-box;width:100%;max-width:1100px;margin:0 auto;padding:0}
+.section-video .grid{display:grid;grid-template-columns:1fr;gap:18px}
+.section-video .copy{display:flex;flex-direction:column;gap:12px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
+.section-video .copy p{color:var(--muted);margin:0}
+.section-video .copy .lead{font-size:1.05rem;font-weight:700;color:var(--ink)}
+.section-video .trust-media{margin-top:auto}
+.section-video .trust-media img{display:block;width:100%;height:auto;border-radius:8px}
+.video-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:0}
+figure.video-card{margin-bottom:0!important}
+@media(min-width:768px){
+  .section-video h2{font-size:1.5rem}
+  .section-video .grid{grid-template-columns:1fr 1fr;gap:24px} /* 50/50 */
+  .section-video .cta-row{flex-direction:row;align-items:center;gap:12px}
+}
+</style>
+
+<section class="section-video" aria-labelledby="how-title">
+  <div class="video-container">
+    <h2 id="how-title" class="section-title" >See Why it Works</h2>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="copy">
+        <p class="lead">Problem → Complex change of legacy systems.</p>
+        <p><strong>Approach →</strong> An agile, senior team runs an R&amp;D sprint with pre-built accelerators. We quickly prove value against a tightly scoped user journey.</p>
+        <p><strong>Value →</strong> In weeks, you have a secure PoC in production-like conditions, clear metrics, and a path to scale without lock-in.</p>
+
+
+        <!-- Logos pinned to bottom of left card -->
+        <figure class="trust-media">
+          <a href="<?php echo esc_url( home_url('/en/meet-tinqin/') ); ?>" aria-label="More about TINQIN">
+            <picture>
+              <!-- Mobile ≤768px -->
+              <source
+                media="(max-width: 768px)"
+                sizes="100vw"
+                srcset="<?php echo get_template_directory_uri(); ?>/images/tinqin-clients-mobile@1x.webp 400w,
+                        <?php echo get_template_directory_uri(); ?>/images/tinqin-clients-mobile@2x.webp 800w">
+              <!-- Desktop ≥769px -->
+              <source
+                media="(min-width: 769px)"
+                sizes="800px"
+                srcset="<?php echo get_template_directory_uri(); ?>/images/tinqin-clients-desktop@1x.webp 800w,
+                        <?php echo get_template_directory_uri(); ?>/images/tinqin-clients-desktop@2x.webp 1600w">
+              <img
+                src="<?php echo get_template_directory_uri(); ?>/images/tinqin-clients-desktop@1x.webp"
+                alt="Selected insurance customers"
+                width="800" height="100"
+                loading="eager" decoding="async" />
+            </picture>
+          </a>
+        </figure>
+      </div>
+
+      <!-- RIGHT -->
+      <div id="why">
+        <?php
+        // Slug of the child page that holds only the YouTube block
+        $video_page = get_page_by_path('solutions-video-cta'); 
+        if ($video_page) {
+          $orig_post = $post; 
+          $post = $video_page; setup_postdata($post);
+          echo '<figure class="video-card">'; 
+          the_content();            // plugin sees this and swaps to click-to-play
+          echo '</figure>';
+          wp_reset_postdata();
+          $post = $orig_post;
+        }
+        ?>
+      </div>
+    </div>
 

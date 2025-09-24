@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Infinity (CI/CD) – SVG + CSS, no JS</title>
+<style>
+  :root{
+    /* TINQIN tokens */
+    --ink:#121417;
+    --brand-red:#CE3531;
+    --accent:#1a73e8;
+
+    /* Animation + stroke */
+    --dur:4s;           /* speed of the moving dot */
+    --stroke:12;        /* base stroke width */
+    --dot-scale:.65;    /* dot thickness vs. base */
+    --bg:#fff;
+  }
+
+  html,body{height:100%}
+  body{
+    margin:0;display:grid;place-items:center;background:var(--bg);
+    font:16px/1.4 Arial, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+    color:var(--ink);
+  }
+
+  /* Keep aspect ratio without CLS */
+  .wrap{width:min(92vw,720px)}
+  .label{margin-top:.5rem;text-align:center;font-size:.875rem;opacity:.8}
+
+  /* Moving “dot” around the path (pure CSS; no JS) */
+  #tracer{
+    stroke:#fff; /* white dot over gradient line; change if on light bg */
+    stroke-width:calc(var(--stroke)*var(--dot-scale));
+    stroke-linecap:round; fill:none;
+    /* Normalize to path length=1 so dash math is trivial */
+    stroke-dasharray:.04 1;            /* short dash + long gap */
+    animation:orbit var(--dur) linear infinite;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));
+  }
+  @keyframes orbit{to{stroke-dashoffset:-1}}
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion:reduce){
+    #tracer{animation:none}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Accessible SVG with fixed width/height to avoid layout shift -->
+    <svg width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="tqTitle tqDesc">
+      <title id="tqTitle">CI/CD infinity animation</title>
+      <desc id="tqDesc">An animated infinity symbol suggesting continuous integration and continuous delivery.</desc>
+
+      <defs>
+        <!-- Lightweight gradient (adds only a few bytes) -->
+        <linearGradient id="tq-grad" x1="0" y1="0" x2="720" y2="420" gradientUnits="userSpaceOnUse">
+          <stop offset="0"   stop-color="var(--brand-red)"/>
+          <stop offset=".55" stop-color="var(--ink)"/>
+          <stop offset="1"   stop-color="var(--accent)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Base infinity loop -->
+      <!-- Geometry chosen to keep smooth curvature and even stroke pressure -->
+      <path id="loop"
+            d="M110,210
+               C110,120 240,120 360,210
+               C480,300 610,300 610,210
+               C610,120 480,120 360,210
+               C240,300 110,300 110,210"
+            fill="none"
+            stroke="url(#tq-grad)"
+            stroke-width="var(--stroke)"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+
+      <!-- Moving “dot” that orbits the same path -->
+      <!-- pathLength=1 lets us animate with dashoffset:-1 for one full lap -->
+      <path id="tracer"
+            pathLength="1"
+            d="M110,210
+               C110,120 240,120 360,210
+               C480,300 610,300 610,210
+               C610,120 480,120 360,210
+               C240,300 110,300 110,210" />
+    </svg>
+
+    <!-- Optional caption (edit or remove) -->
+    <div class="label">CI/CD · Intégration &amp; Livraison Continues</div>
+  </div>
+</body>
+</html>

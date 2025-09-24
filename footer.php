@@ -11,7 +11,7 @@
       src="<?php echo get_template_directory_uri(); ?>/images/footer-background.webp" 
       alt="Footer Background">
   </picture>
-	<div class="container mb-lg-4 mb-md-3 mb-sm-1">
+	<div class="container-fluid mb-lg-4 mb-md-3 mb-sm-1 px-0">
 		<div class="row  d-flex justify-content-center">
 		  
         	<div class="col-lg-9 col-md-12 text-center">
@@ -56,9 +56,19 @@
 		<div class="col-lg-2 col-md-4 col-12 mt-4 center-on-mobile">
 			 <h4 class="fat-title mb-2"><?php pll_e( 'Последвай ни', 'tinqin' ) ?></h4>
 			<div class="pt-2">
-							    <?php if ( is_active_sidebar( 'social-sidebar' ) ) : ?>
-              <?php dynamic_sidebar( 'social-sidebar' ); ?>
-          <?php endif; ?>
+					<!-- SOCIAL -->
+			<div class="social-icons" aria-label="Follow TINQIN">
+			  <a class="si" href="https://www.facebook.com/tinqin.solutions" target="_blank" rel="noopener" aria-label="Facebook">
+				<span class="icon" style="--icon:url('/wp-content/themes/tinqin/images/facebook.svg')"></span>
+			  </a>
+			  <a class="si" href="https://www.linkedin.com/company/tinqin/" target="_blank" rel="noopener" aria-label="LinkedIn">
+				<span class="icon" style="--icon:url('/wp-content/themes/tinqin/images/linkedin.svg')"></span>
+			  </a>
+			  <a class="si" href="https://www.youtube.com/channel/UCqOS5xs7CVE9PPSzz5QELsw/videos" target="_blank" rel="noopener" aria-label="YouTube">
+				<span class="icon" style="--icon:url('/wp-content/themes/tinqin/images/youtube.svg')"></span>
+			  </a>
+			</div>
+
 			</div>
         </div>
       </div>

@@ -83,7 +83,7 @@ global $post;
 
 
   <!-- Client random post -->
-  <div class="client-box pt-5 pb-5 mt-lg-5" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>	  
+  <div class="container tq-benefits tq-benefits--dark pt-3 pb-3" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='200'>	  
 	  <div id="testimonialCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
 		  <div class="carousel-inner"> 
 			  <?php $i = 0; foreach ( $testimonials as $testimonal ) { ?>

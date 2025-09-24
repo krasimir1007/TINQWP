@@ -93,14 +93,6 @@ global $post;
         </div>
       </div>
     </div>
-  <!-- Quote CTA -->
-  <div class="container pt-5 mb-4" data-aos="fade-up" data-aos-duration='1000' data-aos-delay='800' data-aos-anchor='#parent-offer'>
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <a href="mailto:sales@tinqin.com" class="btn btn-primary btn-lg btn-white"><?php pll_e( 'Поискай оферта' ) ?></a>
-      </div>
-    </div>
-  </div>
   </div>
 
 

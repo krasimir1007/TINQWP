@@ -1,0 +1,8 @@
+<!-- TINQIN mark only — drop-in replacement (no text, no styles) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101.73 100" width="101.73" height="100" aria-hidden="true" focusable="false">
+  <path d="M0 0h25.88v25.41H0z" fill="#CE3531"/>
+  <path d="M68.88 67.75H36.03v32.24h32.85l32.85-32.24z" fill="#a7a9ac"/>
+  <path d="M3.18 35.5v32.24l32.85 32.25V35.5z" fill="#d1d3d4"/>
+  <path d="M36.03 3.25V35.5h65.7L68.88 3.25z" fill="#bcbec0"/>
+  <path d="M68.88 35.5h32.85v32.25H68.88z" fill="#808285"/>
+</svg>
